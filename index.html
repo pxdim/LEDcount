@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LED電視牆專業計算系統 Pro</title>
+    <title>LED電視牆專業計算系統 - RWD Pro版</title>
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,1161 +28,1104 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Segoe UI', -apple-system, system-ui, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 15px;
+            padding: 0;
+            margin: 0;
         }
 
-        /* 頁面切換 */
-        .page {
-            display: none;
+        /* Container */
+        .app-container {
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .page.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* 導航按鈕 */
-        .nav-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
+        /* Header */
+        .header {
             background: rgba(255, 255, 255, 0.95);
-            color: #667eea;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 0.9em;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-section {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
         }
 
-        .nav-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* ========== 前台計算機樣式 ========== */
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
             color: white;
-            margin-bottom: 20px;
-            padding: 15px 0;
         }
 
-        .header h1 {
-            font-size: 2em;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .title {
+            font-size: 1.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .header p {
-            font-size: 0.95em;
-            opacity: 0.9;
+        .mode-selector {
+            display: flex;
+            background: var(--light);
+            border-radius: 10px;
+            padding: 4px;
+            gap: 4px;
         }
 
-        .mode-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.3);
-            padding: 4px 12px;
-            border-radius: 15px;
-            margin-top: 8px;
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.85em;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
+        .mode-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Main Layout */
         .main-layout {
             display: grid;
-            grid-template-columns: 380px 1fr;
+            grid-template-columns: 400px 1fr;
             gap: 20px;
-            margin-bottom: 20px;
         }
 
-        @media (max-width: 1200px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        /* Cards */
         .card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
         }
 
-        .card-compact {
-            padding: 15px;
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
         }
 
         .card-title {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.875em;
+            font-weight: 500;
+            color: #475569;
         }
 
         .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group-compact {
-            margin-bottom: 10px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
-            font-size: 0.85em;
-        }
-
-        .input-wrapper {
             display: flex;
             gap: 8px;
             align-items: center;
         }
 
-        input[type="number"], select {
+        .form-input {
             flex: 1;
-            padding: 8px 12px;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
             font-size: 0.95em;
-            transition: all 0.2s ease;
-            background: #f8f9fa;
+            transition: all 0.3s;
         }
 
-        input:focus, select:focus {
+        .form-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95em;
             background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .unit {
-            color: #777;
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-unit {
+            color: #94a3b8;
+            font-size: 0.875em;
             font-weight: 500;
-            font-size: 0.85em;
-            white-space: nowrap;
         }
 
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
+        /* Buttons */
         .btn {
-            padding: 10px 16px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
-            font-size: 0.9em;
+            border-radius: 10px;
+            font-size: 0.95em;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
         }
 
         .btn-secondary {
-            background: #f0f0f0;
-            color: #555;
+            background: var(--light);
+            color: #475569;
         }
 
-        /* 結果區域優化 */
-        .results-container {
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-group {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        @media (max-width: 1400px) {
-            .results-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 968px) {
-            .results-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .result-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .result-card-title {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
+            margin-top: 20px;
         }
 
-        .result-grid-3 {
-            grid-template-columns: repeat(3, 1fr);
+        /* Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
-        .result-item {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .result-item:hover {
-            background: #e9ecef;
-            transform: scale(1.02);
-        }
-
-        .result-label {
-            font-size: 0.75em;
-            color: #777;
-            margin-bottom: 3px;
-        }
-
-        .result-value {
-            font-size: 1.1em;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .result-value.highlight {
-            color: #667eea;
-            font-size: 1.2em;
-        }
-
-        .result-value.large {
-            font-size: 1.4em;
-        }
-
-        /* 租賃配件表格 */
-        .cable-table {
-            width: 100%;
-            background: white;
-            border-radius: 10px;
+        /* Stat Cards */
+        .stat-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: var(--radius);
+            padding: 16px;
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
 
-        .cable-table thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .cable-table th {
-            padding: 10px 12px;
-            text-align: left;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .cable-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 0.85em;
-        }
-
-        .cable-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        .cable-table .count {
-            font-weight: 700;
-            color: #667eea;
-            text-align: right;
-        }
-
-        .cable-table .category {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #555;
-        }
-
-        /* 快速統計條 */
-        .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        .stat-item {
-            text-align: center;
-            color: white;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-number {
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 3px;
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
         }
 
         .stat-label {
             font-size: 0.75em;
-            opacity: 0.9;
+            color: #64748b;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
         }
 
-        /* 緊湊版進階設定 */
-        .advanced-toggle {
-            background: #f0f0f0;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85em;
-            color: #667eea;
+        .stat-value {
+            font-size: 1.75em;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-value.primary {
+            color: var(--primary);
+        }
+
+        .stat-unit {
+            font-size: 0.5em;
+            color: #94a3b8;
+            margin-left: 4px;
+        }
+
+        /* Cable Details Table */
+        .cable-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 16px;
+        }
+
+        .cable-table thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .cable-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.875em;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .advanced-content {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #e0e0e0;
-            display: none;
-        }
-
-        .advanced-content.show {
-            display: block;
-        }
-
-        /* 成本顯示優化 */
-        .cost-summary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 15px;
         }
 
-        .cost-main {
+        .cable-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .cable-table th:last-child {
+            border-radius: 0 10px 0 0;
+            text-align: right;
+        }
+
+        .cable-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cable-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .cable-table td {
+            padding: 12px 16px;
+            font-size: 0.875em;
+        }
+
+        .cable-table .category-row {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .cable-table .category-row td {
+            padding: 10px 16px;
+            font-size: 0.9em;
+        }
+
+        .cable-table .count {
+            text-align: right;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1em;
+        }
+
+        /* Visual Grid Preview */
+        .grid-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: var(--radius);
+            margin: 16px 0;
+        }
+
+        .led-grid {
+            display: inline-grid;
+            gap: 2px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .led-module {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .led-module::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 1px;
+        }
+
+        /* Cost Summary */
+        .cost-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .cost-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .cost-title {
             font-size: 1.1em;
             font-weight: 600;
+            opacity: 0.9;
         }
 
         .cost-total {
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: 700;
         }
 
-        .cost-breakdown {
+        .cost-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
         }
 
         .cost-item {
-            background: rgba(255,255,255,0.2);
-            padding: 10px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            padding: 12px;
+            border-radius: 10px;
         }
 
         .cost-item-label {
             font-size: 0.75em;
-            opacity: 0.9;
-            margin-bottom: 3px;
+            opacity: 0.8;
+            margin-bottom: 4px;
         }
 
         .cost-item-value {
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: 600;
         }
 
-        /* 視覺預覽精簡版 */
-        .visual-preview {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            text-align: center;
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .main-layout {
+                grid-template-columns: 380px 1fr;
+            }
         }
 
-        .led-grid {
-            display: inline-grid;
-            gap: 1px;
-            padding: 10px;
-            background: #333;
-            border-radius: 8px;
-            margin: 10px 0;
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        .led-panel {
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
-            border-radius: 1px;
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+            }
+
+            .title {
+                font-size: 1.2em;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cost-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* 建議區域優化 */
-        .suggestions-box {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+        @media (max-width: 480px) {
+            .mode-selector {
+                width: 100%;
+            }
+
+            .mode-btn {
+                flex: 1;
+                font-size: 0.875em;
+            }
+
+            .stat-value {
+                font-size: 1.5em;
+            }
+
+            .cable-table {
+                font-size: 0.8em;
+            }
+
+            .cable-table th,
+            .cable-table td {
+                padding: 8px 12px;
+            }
+
+            .cost-total {
+                font-size: 1.5em;
+            }
         }
 
-        .suggestions-title {
-            color: #856404;
-            font-size: 0.95em;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .suggestions-list {
-            display: grid;
-            gap: 8px;
+        .card {
+            animation: slideIn 0.4s ease-out;
         }
 
-        .suggestion-item {
-            background: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        /* Loading State */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
         }
 
-        .suggestion-icon {
-            color: #28a745;
-            font-weight: bold;
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
         }
 
-        /* 浮動操作按鈕 */
-        .fab-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 999;
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
         }
 
-        .fab {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .fab:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.4);
-        }
-
-        /* Toast提示 */
-        .toast {
-            position: fixed;
-            bottom: 30px;
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: #333;
+            background: var(--dark);
             color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            display: none;
-            animation: slideUp 0.3s ease;
-            z-index: 2000;
-            font-size: 0.9em;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
 
-        .toast.show {
-            display: block;
+        .tooltip:hover::after {
+            opacity: 1;
         }
 
-        /* 後台優化 */
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .config-grid {
+        /* Quick Stats Bar */
+        .quick-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        .config-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
+        .quick-stat {
+            background: white;
+            padding: 12px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
         }
 
-        .config-label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
-            font-size: 0.85em;
+        .quick-stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--primary);
         }
 
-        .config-input {
+        .quick-stat-label {
+            font-size: 0.75em;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Advanced Settings */
+        .advanced-toggle {
             width: 100%;
-            padding: 8px 10px;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 0.9em;
+            padding: 12px;
+            background: var(--light);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0;
+            transition: all 0.3s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .advanced-toggle:hover {
+            background: #e2e8f0;
         }
 
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translate(-50%, 20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
+        .advanced-content {
+            display: none;
+            padding-top: 16px;
+            border-top: 2px solid var(--border);
+            margin-top: 16px;
+        }
+
+        .advanced-content.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Rental Highlight */
+        .rental-highlight {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            color: white;
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+
+        .rental-highlight h4 {
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 0.875em;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <!-- 導航按鈕 -->
-    <button class="nav-button" onclick="togglePage()">
-        <span id="navIcon">⚙️</span>
-        <span id="navText">設定</span>
-    </button>
-
-    <!-- 前台計算機頁面 -->
-    <div id="calculatorPage" class="page active">
-        <div class="container">
-            <div class="header">
-                <h1>🖥️ LED電視牆專業計算系統</h1>
-                <p>精確計算模組配置、線材需求、成本預估</p>
-                <div class="mode-badge" id="modeBadge">採購模式</div>
-            </div>
-
-            <div class="main-layout">
-                <!-- 左側輸入面板 -->
-                <div class="card">
-                    <h2 class="card-title">
-                        <span>📐</span>
-                        參數設定
-                    </h2>
-                    
-                    <!-- 業務模式 -->
-                    <div class="input-group-compact">
-                        <label>業務模式</label>
-                        <select id="businessMode" onchange="switchBusinessMode()">
-                            <option value="purchase">採購模式</option>
-                            <option value="rental">租賃模式</option>
-                        </select>
-                    </div>
-
-                    <!-- 租賃選項 -->
-                    <div id="rentalOptions" style="display:none; background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                        <div class="input-group-compact">
-                            <label style="color: white;">租賃天數</label>
-                            <div class="input-wrapper">
-                                <input type="number" id="rentalDays" value="3" min="1" style="background: rgba(255,255,255,0.9);">
-                                <span class="unit" style="color: white;">天</span>
-                            </div>
-                        </div>
-                        <div class="input-group-compact">
-                            <label style="color: white;">快速規格</label>
-                            <select id="quickSpec" onchange="applyQuickSpec()" style="background: rgba(255,255,255,0.9);">
-                                <option value="">自定義</option>
-                                <option value="p2.6">P2.6 室內</option>
-                                <option value="p3.91">P3.91 室內/戶外</option>
-                                <option value="p4.81">P4.81 戶外</option>
-                                <option value="p6.25">P6.25 戶外</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- 基本參數 -->
-                    <div class="input-group-compact">
-                        <label>螢幕尺寸</label>
-                        <div class="input-wrapper">
-                            <input type="number" id="screenSize" value="300" min="1">
-                            <span class="unit">吋</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group-compact">
-                        <label>長寬比</label>
-                        <select id="aspectRatio">
-                            <option value="16:9">16:9</option>
-                            <option value="21:9">21:9</option>
-                            <option value="4:3">4:3</option>
-                            <option value="custom">自定義</option>
-                        </select>
-                    </div>
-
-                    <div id="customRatio" style="display:none;">
-                        <div class="input-group-compact">
-                            <div class="input-wrapper">
-                                <input type="number" id="customWidth" value="16" min="1">
-                                <span class="unit">:</span>
-                                <input type="number" id="customHeight" value="9" min="1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-group-compact">
-                        <label>模組尺寸</label>
-                        <div class="input-wrapper">
-                            <input type="number" id="panelWidth" value="500" min="1">
-                            <span class="unit">×</span>
-                            <input type="number" id="panelHeight" value="500" min="1">
-                            <span class="unit">mm</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group-compact">
-                        <label>像素間距</label>
-                        <div class="input-wrapper">
-                            <input type="number" id="pixelPitch" value="8" min="0.1" step="0.1">
-                            <span class="unit">mm</span>
-                        </div>
-                    </div>
-
-                    <!-- 進階設定 -->
-                    <div class="advanced-toggle" onclick="toggleAdvanced()">
-                        <span>進階設定</span>
-                        <span id="advancedArrow">▼</span>
-                    </div>
-                    <div id="advancedContent" class="advanced-content">
-                        <div class="input-group-compact">
-                            <label>模組功耗</label>
-                            <div class="input-wrapper">
-                                <input type="number" id="panelPower" value="50" min="1">
-                                <span class="unit">W</span>
-                            </div>
-                        </div>
-                        <div class="input-group-compact">
-                            <label>控制卡負載</label>
-                            <div class="input-wrapper">
-                                <input type="number" id="controlCardCapacity" value="655360" min="1">
-                                <span class="unit">px</span>
-                            </div>
-                        </div>
-                        <div class="input-group-compact">
-                            <label>接收卡網口</label>
-                            <div class="input-wrapper">
-                                <input type="number" id="receiverPorts" value="2" min="1">
-                                <span class="unit">個</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn btn-primary" onclick="calculate()">計算</button>
-                        <button class="btn btn-secondary" onclick="reset()">重置</button>
-                    </div>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">🖥️</div>
+                    <h1 class="title">LED電視牆專業計算系統</h1>
                 </div>
-
-                <!-- 右側結果區 -->
-                <div>
-                    <!-- 快速統計 -->
-                    <div class="quick-stats" id="quickStats" style="display:none;">
-                        <div class="stat-item">
-                            <div class="stat-number" id="statWidth">-</div>
-                            <div class="stat-label">寬度(m)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="statHeight">-</div>
-                            <div class="stat-label">高度(m)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="statPanels">-</div>
-                            <div class="stat-label">模組數</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="statPixels">-</div>
-                            <div class="stat-label">總像素(M)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="statPower">-</div>
-                            <div class="stat-label">功率(kW)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="statCables">-</div>
-                            <div class="stat-label">網路線</div>
-                        </div>
-                    </div>
-
-                    <!-- 詳細結果網格 -->
-                    <div class="results-container" id="resultsContainer" style="display:none;">
-                        <!-- 尺寸配置卡片 -->
-                        <div class="result-card">
-                            <h3 class="result-card-title">📏 尺寸配置</h3>
-                            <div class="result-grid">
-                                <div class="result-item">
-                                    <div class="result-label">實際寬度</div>
-                                    <div class="result-value highlight" id="actualWidth">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">實際高度</div>
-                                    <div class="result-value highlight" id="actualHeight">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">總面積</div>
-                                    <div class="result-value" id="totalArea">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">對角線</div>
-                                    <div class="result-value" id="diagonal">-</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 模組配置卡片 -->
-                        <div class="result-card">
-                            <h3 class="result-card-title">🔲 模組配置</h3>
-                            <div class="result-grid">
-                                <div class="result-item">
-                                    <div class="result-label">橫向模組</div>
-                                    <div class="result-value large" id="panelsWide">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">縱向模組</div>
-                                    <div class="result-value large" id="panelsHigh">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">總模組數</div>
-                                    <div class="result-value highlight large" id="totalPanels">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">備用5%</div>
-                                    <div class="result-value" id="sparePanels">-</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 解析度卡片 -->
-                        <div class="result-card">
-                            <h3 class="result-card-title">🖼️ 解析度</h3>
-                            <div class="result-grid">
-                                <div class="result-item">
-                                    <div class="result-label">水平解析</div>
-                                    <div class="result-value" id="horizontalRes">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">垂直解析</div>
-                                    <div class="result-value" id="verticalRes">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">總像素</div>
-                                    <div class="result-value highlight" id="totalPixels">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">像素密度</div>
-                                    <div class="result-value" id="pixelDensity">-</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 控制系統卡片 -->
-                        <div class="result-card">
-                            <h3 class="result-card-title">🎮 控制系統</h3>
-                            <div class="result-grid">
-                                <div class="result-item">
-                                    <div class="result-label">發送卡</div>
-                                    <div class="result-value highlight" id="senderCards">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">接收卡</div>
-                                    <div class="result-value highlight" id="receiverCards">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">處理器</div>
-                                    <div class="result-value" id="videoProcessor">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">控制電腦</div>
-                                    <div class="result-value" id="controlPC">-</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 電力系統卡片 -->
-                        <div class="result-card">
-                            <h3 class="result-card-title">⚡ 電力需求</h3>
-                            <div class="result-grid">
-                                <div class="result-item">
-                                    <div class="result-label">總功耗</div>
-                                    <div class="result-value highlight large" id="totalPower">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">建議電源</div>
-                                    <div class="result-value" id="suggestedPower">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">電源線組</div>
-                                    <div class="result-value" id="powerCables">-</div>
-                                </div>
-                                <div class="result-item">
-                                    <div class="result-label">網路線數</div>
-                                    <div class="result-value" id="networkCables">-</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 視覺預覽卡片 -->
-                        <div class="result-card">
-                            <h3 class="result-card-title">🎨 模組預覽</h3>
-                            <div class="visual-preview">
-                                <div id="ledGridPreview"></div>
-                                <p style="font-size: 0.75em; color: #999; margin-top: 5px;">
-                                    模組排列示意圖
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 租賃配件表格 -->
-                    <div class="card card-compact" id="cableDetails" style="display:none; margin-top: 15px;">
-                        <h3 class="card-title">📦 租賃配件清單</h3>
-                        <table class="cable-table">
-                            <thead>
-                                <tr>
-                                    <th>類別</th>
-                                    <th>品項</th>
-                                    <th style="text-align: right;">數量</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="category">
-                                    <td colspan="3">📺 顯示設備</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>LED模組</td>
-                                    <td class="count" id="modulesCount">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>備用模組(5%)</td>
-                                    <td class="count" id="spareModules">-</td>
-                                </tr>
-                                <tr class="category">
-                                    <td colspan="3">🎛️ 控制系統</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>發送卡</td>
-                                    <td class="count" id="senderCount">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>接收卡</td>
-                                    <td class="count" id="receiverCount">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>視頻處理器</td>
-                                    <td class="count">1 台</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>控制電腦</td>
-                                    <td class="count">1 台</td>
-                                </tr>
-                                <tr class="category">
-                                    <td colspan="3">🔌 線材配件</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>主網路線(20m)</td>
-                                    <td class="count" id="mainNetworkCables">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>短網路線(1m)</td>
-                                    <td class="count" id="shortNetworkCables">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>主電源線(20m)</td>
-                                    <td class="count" id="mainPowerCables">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>短電源線(1m)</td>
-                                    <td class="count" id="shortPowerCables">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>電源分配器</td>
-                                    <td class="count" id="powerDistributors">-</td>
-                                </tr>
-                                <tr class="category">
-                                    <td colspan="3">📦 運輸設備</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>航空箱</td>
-                                    <td class="count" id="flightCases">-</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>配件箱</td>
-                                    <td class="count">2 個</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- 成本匯總 -->
-                    <div class="cost-summary" id="costSummary" style="display:none;">
-                        <div class="cost-main">
-                            <div class="cost-title">💰 成本估算</div>
-                            <div class="cost-total" id="totalCost">NT$ 0</div>
-                        </div>
-                        <div class="cost-breakdown">
-                            <div class="cost-item">
-                                <div class="cost-item-label" id="cost-label-1">LED模組</div>
-                                <div class="cost-item-value" id="panelCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label" id="cost-label-2">控制系統</div>
-                                <div class="cost-item-value" id="controlCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label" id="cost-label-3">線材配件</div>
-                                <div class="cost-item-value" id="cableCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label" id="cost-label-4">安裝結構</div>
-                                <div class="cost-item-value" id="structureCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label" id="cost-label-5">人工安裝</div>
-                                <div class="cost-item-value" id="laborCost">-</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 建議提示 -->
-                    <div class="suggestions-box" id="suggestionsBox" style="display:none;">
-                        <div class="suggestions-title">
-                            <span>💡</span>
-                            <span>專業建議</span>
-                        </div>
-                        <div class="suggestions-list" id="suggestionsList">
-                            <!-- 動態生成 -->
-                        </div>
-                    </div>
+                <div class="mode-selector">
+                    <button class="mode-btn active" onclick="setMode('purchase')">採購模式</button>
+                    <button class="mode-btn" onclick="setMode('rental')">租賃模式</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 後台設定頁面(簡化) -->
-    <div id="adminPage" class="page">
-        <div class="admin-container">
-            <div class="card" style="margin-bottom: 20px;">
-                <h1 class="card-title" style="font-size: 1.5em;">⚙️ 系統設定</h1>
+        <!-- Quick Stats -->
+        <div class="quick-stats" id="quickStats" style="display:none;">
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="quickWidth">-</div>
+                <div class="quick-stat-label">寬度(m)</div>
             </div>
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="quickHeight">-</div>
+                <div class="quick-stat-label">高度(m)</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="quickModules">-</div>
+                <div class="quick-stat-label">模組數</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="quickPixels">-</div>
+                <div class="quick-stat-label">像素(M)</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="quickPower">-</div>
+                <div class="quick-stat-label">功率(kW)</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="quickTotal">-</div>
+                <div class="quick-stat-label">總價(萬)</div>
+            </div>
+        </div>
 
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Input Panel -->
             <div class="card">
-                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="switchTab('basic')" id="tab-basic">基本設定</button>
-                    <button class="btn btn-secondary" onclick="switchTab('purchase')" id="tab-purchase">採購價格</button>
-                    <button class="btn btn-secondary" onclick="switchTab('rental')" id="tab-rental">租賃價格</button>
-                    <button class="btn btn-secondary" onclick="switchTab('cables')" id="tab-cables">線材設定</button>
+                <div class="card-header">
+                    <div class="card-icon">📐</div>
+                    <h2 class="card-title">參數設定</h2>
                 </div>
 
-                <!-- 基本設定 -->
-                <div id="basic" class="tab-content">
-                    <h3 style="margin-bottom: 15px; color: #333;">基本參數預設值</h3>
-                    <div class="config-grid">
-                        <div class="config-card">
-                            <label class="config-label">預設螢幕尺寸</label>
-                            <input type="number" class="config-input" id="defaultScreenSize" value="300">
+                <!-- Rental Options -->
+                <div id="rentalOptions" class="rental-highlight" style="display:none;">
+                    <h4>🎪 租賃專屬設定</h4>
+                    <div class="form-group">
+                        <label class="form-label">租賃天數</label>
+                        <div class="input-group">
+                            <input type="number" class="form-input" id="rentalDays" value="3" min="1">
+                            <span class="input-unit">天</span>
                         </div>
-                        <div class="config-card">
-                            <label class="config-label">預設像素間距</label>
-                            <input type="number" class="config-input" id="defaultPixelPitch" value="8" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">快速選擇規格</label>
+                        <select class="form-select" id="quickSpec" onchange="applyQuickSpec()">
+                            <option value="">-- 自定義 --</option>
+                            <option value="p2.6">P2.6 室內 (500×500mm)</option>
+                            <option value="p3.91">P3.91 室內/戶外 (500×500mm)</option>
+                            <option value="p4.81">P4.81 戶外 (500×500mm)</option>
+                            <option value="p6.25">P6.25 戶外 (500×500mm)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Basic Parameters -->
+                <div class="form-group">
+                    <label class="form-label">螢幕對角線尺寸</label>
+                    <div class="input-group">
+                        <input type="number" class="form-input" id="screenSize" value="300" min="1">
+                        <span class="input-unit">吋</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">長寬比例</label>
+                    <select class="form-select" id="aspectRatio">
+                        <option value="16:9">16:9 (標準)</option>
+                        <option value="21:9">21:9 (超寬)</option>
+                        <option value="4:3">4:3 (傳統)</option>
+                        <option value="custom">自定義</option>
+                    </select>
+                </div>
+
+                <div id="customRatio" style="display:none;" class="form-group">
+                    <label class="form-label">自定義比例</label>
+                    <div class="input-group">
+                        <input type="number" class="form-input" id="customWidth" value="16" min="1">
+                        <span class="input-unit">:</span>
+                        <input type="number" class="form-input" id="customHeight" value="9" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">單片LED模組尺寸</label>
+                    <div class="input-group">
+                        <input type="number" class="form-input" id="panelWidth" value="500" min="1">
+                        <span class="input-unit">×</span>
+                        <input type="number" class="form-input" id="panelHeight" value="500" min="1">
+                        <span class="input-unit">mm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="tooltip" data-tooltip="像素間距越小，解析度越高">像素間距 (Pixel Pitch)</span>
+                    </label>
+                    <div class="input-group">
+                        <input type="number" class="form-input" id="pixelPitch" value="8" min="0.1" step="0.1">
+                        <span class="input-unit">mm</span>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings -->
+                <button class="advanced-toggle" onclick="toggleAdvanced()">
+                    <span>⚙️ 進階設定</span>
+                    <span id="advancedArrow">▼</span>
+                </button>
+                
+                <div id="advancedContent" class="advanced-content">
+                    <div class="form-group">
+                        <label class="form-label">單片模組功耗</label>
+                        <div class="input-group">
+                            <input type="number" class="form-input" id="panelPower" value="50" min="1">
+                            <span class="input-unit">W</span>
                         </div>
-                        <div class="config-card">
-                            <label class="config-label">預設模組寬度</label>
-                            <input type="number" class="config-input" id="defaultPanelWidth" value="500">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">控制卡負載能力</label>
+                        <div class="input-group">
+                            <input type="number" class="form-input" id="controlCardCapacity" value="655360" min="1">
+                            <span class="input-unit">像素</span>
                         </div>
-                        <div class="config-card">
-                            <label class="config-label">預設模組高度</label>
-                            <input type="number" class="config-input" id="defaultPanelHeight" value="500">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">接收卡網口數量</label>
+                        <div class="input-group">
+                            <input type="number" class="form-input" id="receiverPorts" value="2" min="1">
+                            <span class="input-unit">個</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">每組電源帶載模組數</label>
+                        <div class="input-group">
+                            <input type="number" class="form-input" id="powerGroupSize" value="4" min="1">
+                            <span class="input-unit">片</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 其他標籤內容 -->
-                <div id="purchase" class="tab-content" style="display:none;">
-                    <h3 style="margin-bottom: 15px; color: #333;">採購價格設定</h3>
-                    <div class="config-grid">
-                        <div class="config-card">
-                            <label class="config-label">LED模組單價</label>
-                            <input type="number" class="config-input" id="purchasePanelPrice" value="2000">
+                <!-- Action Buttons -->
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculate()">
+                        <span>📊</span> 計算
+                    </button>
+                    <button class="btn btn-secondary" onclick="reset()">
+                        <span>🔄</span> 重置
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div id="resultsPanel" style="display:none;">
+                <!-- Size and Configuration -->
+                <div class="results-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📏</div>
+                            <h3 class="card-title">尺寸配置</h3>
                         </div>
-                        <div class="config-card">
-                            <label class="config-label">發送卡單價</label>
-                            <input type="number" class="config-input" id="purchaseSenderPrice" value="5000">
+                        <div class="stat-card">
+                            <div class="stat-label">實際尺寸</div>
+                            <div class="stat-value primary">
+                                <span id="actualSize">-</span>
+                                <span class="stat-unit">公尺</span>
+                            </div>
                         </div>
-                        <div class="config-card">
-                            <label class="config-label">接收卡單價</label>
-                            <input type="number" class="config-input" id="purchaseReceiverPrice" value="800">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                            <div class="stat-card">
+                                <div class="stat-label">總面積</div>
+                                <div class="stat-value" id="totalArea">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">對角線</div>
+                                <div class="stat-value" id="diagonal">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🔲</div>
+                            <h3 class="card-title">模組配置</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="stat-card">
+                                <div class="stat-label">橫向模組</div>
+                                <div class="stat-value primary" id="panelsWide">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">縱向模組</div>
+                                <div class="stat-value primary" id="panelsHigh">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">總模組數</div>
+                                <div class="stat-value" id="totalPanels">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">備用5%</div>
+                                <div class="stat-value" id="sparePanels">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🖼️</div>
+                            <h3 class="card-title">解析度與像素</h3>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">總解析度</div>
+                            <div class="stat-value primary" id="resolution">-</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                            <div class="stat-card">
+                                <div class="stat-label">總像素</div>
+                                <div class="stat-value" id="totalPixels">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">像素密度</div>
+                                <div class="stat-value" id="pixelDensity">-</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="rental" class="tab-content" style="display:none;">
-                    <h3 style="margin-bottom: 15px; color: #333;">租賃價格設定</h3>
-                    <div class="config-grid">
-                        <div class="config-card">
-                            <label class="config-label">模組租金/天</label>
-                            <input type="number" class="config-input" id="rentalPanelPrice" value="2000">
-                        </div>
-                        <div class="config-card">
-                            <label class="config-label">運輸費用</label>
-                            <input type="number" class="config-input" id="rentalTransportPrice" value="20000">
-                        </div>
-                        <div class="config-card">
-                            <label class="config-label">技術人員/天</label>
-                            <input type="number" class="config-input" id="rentalTechnicianPrice" value="8000">
-                        </div>
+                <!-- Cable Details -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="card-icon">🔌</div>
+                        <h3 class="card-title">線材配件詳細清單</h3>
                     </div>
+                    
+                    <table class="cable-table">
+                        <thead>
+                            <tr>
+                                <th>類別</th>
+                                <th>品項</th>
+                                <th>說明</th>
+                                <th>數量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 顯示模組 -->
+                            <tr class="category-row">
+                                <td colspan="4">📺 顯示模組</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>LED模組</td>
+                                <td>主要顯示單元</td>
+                                <td class="count" id="moduleCount">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>備用模組</td>
+                                <td>5%備用量</td>
+                                <td class="count" id="spareModuleCount">-</td>
+                            </tr>
+                            
+                            <!-- 控制系統 -->
+                            <tr class="category-row">
+                                <td colspan="4">🎮 控制系統</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>發送卡</td>
+                                <td>視頻信號發送</td>
+                                <td class="count" id="senderCards">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>接收卡</td>
+                                <td>模組信號接收</td>
+                                <td class="count" id="receiverCards">-</td>
+                            </tr>
+                            
+                            <!-- 網路線材 -->
+                            <tr class="category-row">
+                                <td colspan="4">🌐 網路線材</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>主幹網路線</td>
+                                <td>發送卡到第一模組(20m)</td>
+                                <td class="count" id="mainNetworkCables">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>橫向跳線</td>
+                                <td>模組間橫向連接(0.5m)</td>
+                                <td class="count" id="horizontalNetworkCables">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>縱向跳線</td>
+                                <td>模組間縱向連接(0.5m)</td>
+                                <td class="count" id="verticalNetworkCables">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>備用網路線</td>
+                                <td>各種長度備用(1m)</td>
+                                <td class="count" id="spareNetworkCables">-</td>
+                            </tr>
+                            
+                            <!-- 電源線材 -->
+                            <tr class="category-row">
+                                <td colspan="4">⚡ 電源線材</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>主電源線</td>
+                                <td>配電箱到分配器(20m)</td>
+                                <td class="count" id="mainPowerCables">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>分支電源線</td>
+                                <td>分配器到模組組(5m)</td>
+                                <td class="count" id="branchPowerCables">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>模組電源跳線</td>
+                                <td>模組間電源連接(0.5m)</td>
+                                <td class="count" id="modulePowerCables">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>電源分配器</td>
+                                <td>電源分配單元</td>
+                                <td class="count" id="powerDistributors">-</td>
+                            </tr>
+                            
+                            <!-- 其他配件 -->
+                            <tr class="category-row">
+                                <td colspan="4">📦 運輸與配件</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>航空箱</td>
+                                <td>6片/箱</td>
+                                <td class="count" id="flightCases">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>線材箱</td>
+                                <td>線材收納箱</td>
+                                <td class="count" id="cableCases">-</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>工具箱</td>
+                                <td>安裝工具組</td>
+                                <td class="count">1 套</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div id="cables" class="tab-content" style="display:none;">
-                    <h3 style="margin-bottom: 15px; color: #333;">線材配件設定</h3>
-                    <div class="config-grid">
-                        <div class="config-card">
-                            <label class="config-label">短網路線比例</label>
-                            <input type="number" class="config-input" id="shortNetworkRatio" value="2">
-                        </div>
-                        <div class="config-card">
-                            <label class="config-label">短電源線比例</label>
-                            <input type="number" class="config-input" id="shortPowerRatio" value="3">
-                        </div>
-                        <div class="config-card">
-                            <label class="config-label">航空箱容量</label>
-                            <input type="number" class="config-input" id="caseCapacity" value="6">
-                        </div>
+                <!-- Visual Preview -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="card-icon">🎨</div>
+                        <h3 class="card-title">模組排列預覽</h3>
                     </div>
+                    <div class="grid-preview">
+                        <div id="ledGridPreview"></div>
+                    </div>
+                    <p style="text-align: center; color: #64748b; font-size: 0.875em; margin-top: 10px;">
+                        模組排列示意圖 <span id="gridInfo"></span>
+                    </p>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="resetToDefault()">恢復預設</button>
-                    <button class="btn btn-primary" onclick="saveAllSettings()">儲存設定</button>
+                <!-- Cost Summary -->
+                <div class="cost-card">
+                    <div class="cost-header">
+                        <div class="cost-title">💰 成本估算</div>
+                        <div class="cost-total" id="totalCost">NT$ 0</div>
+                    </div>
+                    <div class="cost-grid">
+                        <div class="cost-item">
+                            <div class="cost-item-label" id="cost-label-1">LED模組</div>
+                            <div class="cost-item-value" id="cost-1">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label" id="cost-label-2">控制系統</div>
+                            <div class="cost-item-value" id="cost-2">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label" id="cost-label-3">線材配件</div>
+                            <div class="cost-item-value" id="cost-3">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label" id="cost-label-4">結構/運輸</div>
+                            <div class="cost-item-value" id="cost-4">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label" id="cost-label-5">安裝/保險</div>
+                            <div class="cost-item-value" id="cost-5">-</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 浮動按鈕 -->
-    <div class="fab-container">
-        <button class="fab" onclick="exportResults()" title="匯出報告">📥</button>
-    </div>
-
-    <!-- Toast提示 -->
-    <div id="toast" class="toast">
-        <span id="toastMessage">設定已儲存</span>
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 LED電視牆專業計算系統 | 精確計算每一條線材</p>
+        </div>
     </div>
 
     <script>
-        // 頁面切換
-        function togglePage() {
-            const calculatorPage = document.getElementById('calculatorPage');
-            const adminPage = document.getElementById('adminPage');
-            const navButton = document.querySelector('.nav-button');
-            const navIcon = document.getElementById('navIcon');
-            const navText = document.getElementById('navText');
+        // Global variables
+        let currentMode = 'purchase';
+
+        // Set business mode
+        function setMode(mode) {
+            currentMode = mode;
+            const buttons = document.querySelectorAll('.mode-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
             
-            if (calculatorPage.classList.contains('active')) {
-                calculatorPage.classList.remove('active');
-                adminPage.classList.add('active');
-                navIcon.textContent = '📊';
-                navText.textContent = '返回';
-                document.body.style.background = 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)';
+            const rentalOptions = document.getElementById('rentalOptions');
+            if (mode === 'rental') {
+                rentalOptions.style.display = 'block';
             } else {
-                adminPage.classList.remove('active');
-                calculatorPage.classList.add('active');
-                navIcon.textContent = '⚙️';
-                navText.textContent = '設定';
-                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                rentalOptions.style.display = 'none';
             }
         }
 
-        // 切換進階設定
+        // Toggle advanced settings
         function toggleAdvanced() {
             const content = document.getElementById('advancedContent');
             const arrow = document.getElementById('advancedArrow');
@@ -1180,25 +1139,7 @@
             }
         }
 
-        // 切換業務模式
-        function switchBusinessMode() {
-            const mode = document.getElementById('businessMode').value;
-            const rentalOptions = document.getElementById('rentalOptions');
-            const modeBadge = document.getElementById('modeBadge');
-            const cableDetails = document.getElementById('cableDetails');
-            
-            if (mode === 'rental') {
-                rentalOptions.style.display = 'block';
-                modeBadge.textContent = '租賃模式';
-                modeBadge.style.background = 'rgba(255, 216, 155, 0.5)';
-            } else {
-                rentalOptions.style.display = 'none';
-                modeBadge.textContent = '採購模式';
-                modeBadge.style.background = 'rgba(255, 255, 255, 0.3)';
-            }
-        }
-
-        // 套用快速規格
+        // Apply quick spec
         function applyQuickSpec() {
             const spec = document.getElementById('quickSpec').value;
             const specs = {
@@ -1215,7 +1156,7 @@
             }
         }
 
-        // 監聽長寬比
+        // Listen for aspect ratio changes
         document.getElementById('aspectRatio').addEventListener('change', function() {
             const customRatio = document.getElementById('customRatio');
             if (this.value === 'custom') {
@@ -1225,9 +1166,9 @@
             }
         });
 
-        // 主要計算函數
+        // Main calculation function
         function calculate() {
-            // 獲取輸入值
+            // Get input values
             const screenSize = parseFloat(document.getElementById('screenSize').value);
             const aspectRatioSelect = document.getElementById('aspectRatio').value;
             const panelWidth = parseFloat(document.getElementById('panelWidth').value);
@@ -1236,9 +1177,9 @@
             const panelPower = parseFloat(document.getElementById('panelPower').value);
             const controlCardCapacity = parseFloat(document.getElementById('controlCardCapacity').value);
             const receiverPorts = parseFloat(document.getElementById('receiverPorts').value);
-            const businessMode = document.getElementById('businessMode').value;
+            const powerGroupSize = parseFloat(document.getElementById('powerGroupSize').value);
 
-            // 計算長寬比
+            // Calculate aspect ratio
             let ratioWidth, ratioHeight;
             if (aspectRatioSelect === 'custom') {
                 ratioWidth = parseFloat(document.getElementById('customWidth').value);
@@ -1252,182 +1193,177 @@
                 [ratioWidth, ratioHeight] = ratios[aspectRatioSelect];
             }
 
-            // 計算實際尺寸
+            // Calculate dimensions
             const inchToMm = 25.4;
             const diagonal = screenSize * inchToMm;
             const ratio = ratioWidth / ratioHeight;
             const height = Math.sqrt(diagonal * diagonal / (1 + ratio * ratio));
             const width = height * ratio;
 
-            // 計算模組數量
+            // Calculate module configuration
             const panelsWide = Math.ceil(width / panelWidth);
             const panelsHigh = Math.ceil(height / panelHeight);
             const totalPanels = panelsWide * panelsHigh;
             const sparePanels = Math.ceil(totalPanels * 0.05);
 
-            // 計算實際尺寸
+            // Calculate actual dimensions
             const actualWidth = panelsWide * panelWidth;
             const actualHeight = panelsHigh * panelHeight;
             const totalArea = (actualWidth * actualHeight) / 1000000;
 
-            // 計算解析度
+            // Calculate resolution
             const horizontalRes = Math.floor(actualWidth / pixelPitch);
             const verticalRes = Math.floor(actualHeight / pixelPitch);
             const totalPixels = horizontalRes * verticalRes;
             const pixelDensity = Math.round(totalPixels / totalArea);
 
-            // 計算系統需求
-            const networkCables = Math.ceil(totalPixels / controlCardCapacity);
-            const powerCables = Math.ceil(totalPanels / 4);
+            // Calculate control system
+            const senderCards = Math.ceil(totalPixels / controlCardCapacity);
+            const receiverCards = Math.ceil(totalPanels / receiverPorts);
+
+            // Calculate power requirements
             const totalPower = totalPanels * panelPower;
             const suggestedPower = Math.ceil(totalPower * 1.3 / 1000) * 1000;
+            const powerGroups = Math.ceil(totalPanels / powerGroupSize);
 
-            // 控制系統
-            const senderCards = networkCables;
-            const receiverCards = Math.ceil(totalPanels / receiverPorts);
-            const videoProcessor = totalPixels > 2073600 ? "4K處理器" : "2K處理器";
-            const controlPC = totalPixels > 8294400 ? "高配工作站" : "標準控制";
+            // Calculate cables (DETAILED)
+            // Network cables
+            const mainNetworkCables = senderCards; // Main trunk cables from sender to first module
+            const horizontalNetworkCables = (panelsWide - 1) * panelsHigh; // Horizontal jumpers between modules
+            const verticalNetworkCables = panelsWide * (panelsHigh - 1); // Vertical jumpers between modules
+            const spareNetworkCables = Math.ceil((mainNetworkCables + horizontalNetworkCables + verticalNetworkCables) * 0.1); // 10% spare
 
-            // 更新快速統計
-            document.getElementById('statWidth').textContent = (actualWidth/1000).toFixed(1);
-            document.getElementById('statHeight').textContent = (actualHeight/1000).toFixed(1);
-            document.getElementById('statPanels').textContent = totalPanels;
-            document.getElementById('statPixels').textContent = (totalPixels/1000000).toFixed(1);
-            document.getElementById('statPower').textContent = (totalPower/1000).toFixed(1);
-            document.getElementById('statCables').textContent = networkCables;
+            // Power cables
+            const powerDistributors = Math.ceil(powerGroups / 4); // One distributor per 4 power groups
+            const mainPowerCables = powerDistributors; // Main power from distribution box
+            const branchPowerCables = powerGroups; // Branch cables to each group
+            const modulePowerCables = totalPanels - powerGroups; // Jumpers between modules in same group
 
-            // 更新詳細結果
-            document.getElementById('actualWidth').textContent = `${(actualWidth/1000).toFixed(2)}m`;
-            document.getElementById('actualHeight').textContent = `${(actualHeight/1000).toFixed(2)}m`;
-            document.getElementById('totalArea').textContent = `${totalArea.toFixed(2)}m²`;
-            document.getElementById('diagonal').textContent = `${(Math.sqrt(actualWidth*actualWidth + actualHeight*actualHeight)/inchToMm).toFixed(1)}吋`;
+            // Transport
+            const flightCases = Math.ceil(totalPanels / 6);
+            const cableCases = Math.ceil((mainNetworkCables + horizontalNetworkCables + verticalNetworkCables + mainPowerCables + branchPowerCables + modulePowerCables) / 50);
+
+            // Update Quick Stats
+            document.getElementById('quickWidth').textContent = (actualWidth/1000).toFixed(1);
+            document.getElementById('quickHeight').textContent = (actualHeight/1000).toFixed(1);
+            document.getElementById('quickModules').textContent = totalPanels;
+            document.getElementById('quickPixels').textContent = (totalPixels/1000000).toFixed(1);
+            document.getElementById('quickPower').textContent = (totalPower/1000).toFixed(1);
+
+            // Update detailed results
+            document.getElementById('actualSize').textContent = `${(actualWidth/1000).toFixed(2)} × ${(actualHeight/1000).toFixed(2)}`;
+            document.getElementById('totalArea').textContent = `${totalArea.toFixed(2)} m²`;
+            document.getElementById('diagonal').textContent = `${(Math.sqrt(actualWidth*actualWidth + actualHeight*actualHeight)/inchToMm).toFixed(1)} 吋`;
 
             document.getElementById('panelsWide').textContent = panelsWide;
             document.getElementById('panelsHigh').textContent = panelsHigh;
             document.getElementById('totalPanels').textContent = totalPanels;
             document.getElementById('sparePanels').textContent = sparePanels;
 
-            document.getElementById('horizontalRes').textContent = `${horizontalRes}px`;
-            document.getElementById('verticalRes').textContent = `${verticalRes}px`;
-            document.getElementById('totalPixels').textContent = (totalPixels/1000000).toFixed(1) + 'M';
-            document.getElementById('pixelDensity').textContent = `${pixelDensity.toLocaleString()}`;
+            document.getElementById('resolution').textContent = `${horizontalRes} × ${verticalRes}`;
+            document.getElementById('totalPixels').textContent = `${(totalPixels/1000000).toFixed(1)} M`;
+            document.getElementById('pixelDensity').textContent = `${pixelDensity.toLocaleString()} px/m²`;
 
-            document.getElementById('senderCards').textContent = senderCards;
-            document.getElementById('receiverCards').textContent = receiverCards;
-            document.getElementById('videoProcessor').textContent = videoProcessor;
-            document.getElementById('controlPC').textContent = controlPC;
+            // Update cable details
+            document.getElementById('moduleCount').textContent = `${totalPanels} 片`;
+            document.getElementById('spareModuleCount').textContent = `${sparePanels} 片`;
+            document.getElementById('senderCards').textContent = `${senderCards} 張`;
+            document.getElementById('receiverCards').textContent = `${receiverCards} 張`;
+            
+            document.getElementById('mainNetworkCables').textContent = `${mainNetworkCables} 條`;
+            document.getElementById('horizontalNetworkCables').textContent = `${horizontalNetworkCables} 條`;
+            document.getElementById('verticalNetworkCables').textContent = `${verticalNetworkCables} 條`;
+            document.getElementById('spareNetworkCables').textContent = `${spareNetworkCables} 條`;
+            
+            document.getElementById('mainPowerCables').textContent = `${mainPowerCables} 條`;
+            document.getElementById('branchPowerCables').textContent = `${branchPowerCables} 條`;
+            document.getElementById('modulePowerCables').textContent = `${modulePowerCables} 條`;
+            document.getElementById('powerDistributors').textContent = `${powerDistributors} 個`;
+            
+            document.getElementById('flightCases').textContent = `${flightCases} 個`;
+            document.getElementById('cableCases').textContent = `${cableCases} 個`;
 
-            document.getElementById('totalPower').textContent = `${(totalPower/1000).toFixed(1)}kW`;
-            document.getElementById('suggestedPower').textContent = `${(suggestedPower/1000).toFixed(0)}kW`;
-            document.getElementById('powerCables').textContent = `${powerCables}組`;
-            document.getElementById('networkCables').textContent = `${networkCables}條`;
-
-            // 租賃配件清單
-            if (businessMode === 'rental') {
-                const shortNetworkCables = networkCables * 2;
-                const shortPowerCables = powerCables * 3;
-                const powerDistributors = Math.ceil(powerCables / 4);
-                const flightCases = Math.ceil(totalPanels / 6);
-
-                document.getElementById('modulesCount').textContent = `${totalPanels} 片`;
-                document.getElementById('spareModules').textContent = `${sparePanels} 片`;
-                document.getElementById('senderCount').textContent = `${senderCards} 張`;
-                document.getElementById('receiverCount').textContent = `${receiverCards} 張`;
-                document.getElementById('mainNetworkCables').textContent = `${networkCables} 條`;
-                document.getElementById('shortNetworkCables').textContent = `${shortNetworkCables} 條`;
-                document.getElementById('mainPowerCables').textContent = `${powerCables} 組`;
-                document.getElementById('shortPowerCables').textContent = `${shortPowerCables} 條`;
-                document.getElementById('powerDistributors').textContent = `${powerDistributors} 個`;
-                document.getElementById('flightCases').textContent = `${flightCases} 個`;
-
-                document.getElementById('cableDetails').style.display = 'block';
-            } else {
-                document.getElementById('cableDetails').style.display = 'none';
-            }
-
-            // 成本計算
+            // Calculate costs
             let totalCost = 0;
-            if (businessMode === 'rental') {
+            if (currentMode === 'rental') {
                 const rentalDays = parseFloat(document.getElementById('rentalDays').value) || 3;
                 const panelCost = totalPanels * 2000 * rentalDays;
-                totalCost = panelCost * 1.5;
+                const transportCost = 20000;
+                const cableCost = (mainNetworkCables + horizontalNetworkCables + verticalNetworkCables) * 50 + 
+                                 (mainPowerCables + branchPowerCables + modulePowerCables) * 100;
+                const setupCost = totalArea * 500 * 2; // Setup and teardown
+                const insuranceCost = panelCost * 0.03;
+                
+                totalCost = panelCost + transportCost + cableCost + setupCost + insuranceCost;
                 
                 document.getElementById('cost-label-1').textContent = `租金(${rentalDays}天)`;
-                document.getElementById('panelCost').textContent = `${(panelCost/1000).toFixed(0)}k`;
+                document.getElementById('cost-1').textContent = `NT$ ${panelCost.toLocaleString()}`;
+                document.getElementById('cost-label-2').textContent = '控制系統';
+                document.getElementById('cost-2').textContent = `NT$ ${(senderCards * 1000 + receiverCards * 200).toLocaleString()}`;
+                document.getElementById('cost-label-3').textContent = '線材配件';
+                document.getElementById('cost-3').textContent = `NT$ ${cableCost.toLocaleString()}`;
+                document.getElementById('cost-label-4').textContent = '運輸費用';
+                document.getElementById('cost-4').textContent = `NT$ ${transportCost.toLocaleString()}`;
+                document.getElementById('cost-label-5').textContent = '安裝/保險';
+                document.getElementById('cost-5').textContent = `NT$ ${(setupCost + insuranceCost).toLocaleString()}`;
             } else {
                 const panelCost = totalPanels * 2000;
-                totalCost = panelCost * 2.5;
+                const controlCost = senderCards * 5000 + receiverCards * 800;
+                const cableCost = (mainNetworkCables + horizontalNetworkCables + verticalNetworkCables) * 200 + 
+                                 (mainPowerCables + branchPowerCables + modulePowerCables) * 500;
+                const structureCost = totalArea * 3000;
+                const laborCost = totalArea * 1500;
+                
+                totalCost = panelCost + controlCost + cableCost + structureCost + laborCost;
                 
                 document.getElementById('cost-label-1').textContent = 'LED模組';
-                document.getElementById('panelCost').textContent = `${(panelCost/1000).toFixed(0)}k`;
+                document.getElementById('cost-1').textContent = `NT$ ${panelCost.toLocaleString()}`;
+                document.getElementById('cost-label-2').textContent = '控制系統';
+                document.getElementById('cost-2').textContent = `NT$ ${controlCost.toLocaleString()}`;
+                document.getElementById('cost-label-3').textContent = '線材配件';
+                document.getElementById('cost-3').textContent = `NT$ ${cableCost.toLocaleString()}`;
+                document.getElementById('cost-label-4').textContent = '安裝結構';
+                document.getElementById('cost-4').textContent = `NT$ ${structureCost.toLocaleString()}`;
+                document.getElementById('cost-label-5').textContent = '人工安裝';
+                document.getElementById('cost-5').textContent = `NT$ ${laborCost.toLocaleString()}`;
             }
-            
-            document.getElementById('totalCost').textContent = `NT$ ${totalCost.toLocaleString()}`;
 
-            // 生成視覺預覽
+            document.getElementById('totalCost').textContent = `NT$ ${totalCost.toLocaleString()}`;
+            document.getElementById('quickTotal').textContent = (totalCost/10000).toFixed(0);
+
+            // Generate visual preview
             generateVisualPreview(panelsWide, panelsHigh);
 
-            // 生成建議
-            generateSuggestions(pixelPitch, businessMode);
-
-            // 顯示所有結果
+            // Show results
             document.getElementById('quickStats').style.display = 'grid';
-            document.getElementById('resultsContainer').style.display = 'grid';
-            document.getElementById('costSummary').style.display = 'block';
-            document.getElementById('suggestionsBox').style.display = 'block';
+            document.getElementById('resultsPanel').style.display = 'block';
         }
 
-        // 生成視覺預覽
+        // Generate visual preview
         function generateVisualPreview(wide, high) {
             const preview = document.getElementById('ledGridPreview');
-            const maxDisplay = 15;
+            const maxDisplay = 20;
             const displayWide = Math.min(wide, maxDisplay);
             const displayHigh = Math.min(high, maxDisplay);
             
             let gridHtml = `<div class="led-grid" style="grid-template-columns: repeat(${displayWide}, 1fr);">`;
             
             for (let i = 0; i < displayWide * displayHigh; i++) {
-                gridHtml += '<div class="led-panel"></div>';
+                gridHtml += '<div class="led-module"></div>';
             }
             
             gridHtml += '</div>';
-            
-            if (wide > maxDisplay || high > maxDisplay) {
-                gridHtml += `<p style="font-size: 0.7em; color: #999;">
-                    顯示 ${displayWide}×${displayHigh} / 實際 ${wide}×${high}
-                </p>`;
-            }
-            
             preview.innerHTML = gridHtml;
-        }
 
-        // 生成建議
-        function generateSuggestions(pixelPitch, mode) {
-            const suggestionsList = document.getElementById('suggestionsList');
-            let suggestions = [];
-
-            const minDistance = pixelPitch * 1;
-            const optimalDistance = pixelPitch * 3;
-            suggestions.push(`建議觀看距離：${minDistance.toFixed(1)}-${optimalDistance.toFixed(1)}公尺`);
-
-            if (mode === 'rental') {
-                suggestions.push('確認場地電源容量');
-                suggestions.push('提前場地勘察');
-                suggestions.push('準備備用配件');
+            const info = document.getElementById('gridInfo');
+            if (wide > maxDisplay || high > maxDisplay) {
+                info.textContent = `(顯示 ${displayWide}×${displayHigh}, 實際 ${wide}×${high})`;
             } else {
-                suggestions.push('定期維護保養');
-                suggestions.push('預留5%備用模組');
+                info.textContent = `(${wide}×${high} 模組)`;
             }
-
-            suggestionsList.innerHTML = suggestions.map(s => 
-                `<div class="suggestion-item">
-                    <span class="suggestion-icon">✓</span>
-                    <span>${s}</span>
-                </div>`
-            ).join('');
         }
 
-        // 重置
+        // Reset function
         function reset() {
             document.getElementById('screenSize').value = 300;
             document.getElementById('aspectRatio').value = '16:9';
@@ -1435,95 +1371,14 @@
             document.getElementById('panelHeight').value = 500;
             document.getElementById('pixelPitch').value = 8;
             document.getElementById('quickStats').style.display = 'none';
-            document.getElementById('resultsContainer').style.display = 'none';
-            document.getElementById('costSummary').style.display = 'none';
-            document.getElementById('suggestionsBox').style.display = 'none';
-            document.getElementById('cableDetails').style.display = 'none';
+            document.getElementById('resultsPanel').style.display = 'none';
+            document.getElementById('customRatio').style.display = 'none';
         }
 
-        // 匯出結果
-        function exportResults() {
-            if (document.getElementById('resultsContainer').style.display === 'none') {
-                showToast('請先進行計算');
-                return;
-            }
-            
-            // 簡化的匯出功能
-            const data = {
-                尺寸: document.getElementById('actualWidth').textContent,
-                模組: document.getElementById('totalPanels').textContent,
-                像素: document.getElementById('totalPixels').textContent,
-                成本: document.getElementById('totalCost').textContent
-            };
-            
-            const text = JSON.stringify(data, null, 2);
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `LED計算_${new Date().toLocaleDateString()}.txt`;
-            a.click();
-            
-            showToast('報告已匯出');
-        }
-
-        // 後台標籤切換
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.style.display = 'none';
-            });
-            document.getElementById(tabName).style.display = 'block';
-            
-            document.querySelectorAll('[id^="tab-"]').forEach(btn => {
-                btn.className = 'btn btn-secondary';
-            });
-            document.getElementById('tab-' + tabName).className = 'btn btn-primary';
-        }
-
-        // 儲存設定
-        function saveAllSettings() {
-            // 簡化的儲存邏輯
-            localStorage.setItem('ledSettings', JSON.stringify({
-                screenSize: document.getElementById('defaultScreenSize').value,
-                pixelPitch: document.getElementById('defaultPixelPitch').value,
-                panelWidth: document.getElementById('defaultPanelWidth').value,
-                panelHeight: document.getElementById('defaultPanelHeight').value
-            }));
-            showToast('設定已儲存');
-        }
-
-        // 恢復預設
-        function resetToDefault() {
-            document.getElementById('defaultScreenSize').value = 300;
-            document.getElementById('defaultPixelPitch').value = 8;
-            document.getElementById('defaultPanelWidth').value = 500;
-            document.getElementById('defaultPanelHeight').value = 500;
-            showToast('已恢復預設');
-        }
-
-        // Toast提示
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastMessage.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
-        }
-
-        // 載入設定
+        // Auto calculate on load
         window.onload = function() {
-            const settings = localStorage.getItem('ledSettings');
-            if (settings) {
-                const data = JSON.parse(settings);
-                document.getElementById('screenSize').value = data.screenSize || 300;
-                document.getElementById('pixelPitch').value = data.pixelPitch || 8;
-                document.getElementById('panelWidth').value = data.panelWidth || 500;
-                document.getElementById('panelHeight').value = data.panelHeight || 500;
-            }
+            // Add smooth scroll behavior
+            document.documentElement.style.scrollBehavior = 'smooth';
             calculate();
         };
     </script>
