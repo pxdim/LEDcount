@@ -3,1065 +3,1670 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>LED電視牆計算機</title>
+    <title>LED顯示屏專業計算器</title>
     <style>
-        /* Apple System Font Stack */
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: local(-apple-system), local(BlinkMacSystemFont);
-        }
-
-        :root {
-            /* Apple Colors */
-            --apple-blue: #007AFF;
-            --apple-purple: #5856D6;
-            --apple-pink: #FF2D55;
-            --apple-orange: #FF9500;
-            --apple-yellow: #FFCC00;
-            --apple-green: #34C759;
-            --apple-teal: #5AC8FA;
-            --apple-indigo: #5856D6;
-            
-            /* Grays */
-            --gray-50: #F2F2F7;
-            --gray-100: #E5E5EA;
-            --gray-200: #D1D1D6;
-            --gray-300: #C7C7CC;
-            --gray-400: #AEAEB2;
-            --gray-500: #8E8E93;
-            --gray-600: #636366;
-            --gray-700: #48484A;
-            --gray-800: #3A3A3C;
-            --gray-900: #2C2C2E;
-            --gray-950: #1C1C1E;
-            
-            /* Semantic Colors */
-            --background: #FFFFFF;
-            --surface: #F2F2F7;
-            --surface-elevated: #FFFFFF;
-            --text-primary: #000000;
-            --text-secondary: #3C3C43;
-            --text-tertiary: #8E8E93;
-            --separator: rgba(60, 60, 67, 0.12);
-            
-            /* Effects */
-            --blur: saturate(180%) blur(20px);
-            --shadow-sm: 0 0 1px 0 rgba(0,0,0,0.04), 0 2px 4px 0 rgba(0,0,0,0.06);
-            --shadow-md: 0 0 1px 0 rgba(0,0,0,0.04), 0 4px 8px 0 rgba(0,0,0,0.08);
-            --shadow-lg: 0 0 1px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(0,0,0,0.12);
-            --shadow-xl: 0 0 1px 0 rgba(0,0,0,0.04), 0 24px 48px 0 rgba(0,0,0,0.16);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background: #000000;
-                --surface: #1C1C1E;
-                --surface-elevated: #2C2C2E;
-                --text-primary: #FFFFFF;
-                --text-secondary: #EBEBF5;
-                --text-tertiary: #8E8E93;
-                --separator: rgba(84, 84, 88, 0.65);
-            }
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
-        html {
-            overflow-x: hidden;
-            touch-action: pan-y;
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #252525;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #00d4ff;
+            --accent-dim: #0099cc;
+            --border: #333333;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --error: #ff4444;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-            background: var(--surface);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.47059;
-            font-size: 17px;
+            line-height: 1.6;
             overflow-x: hidden;
-            width: 100%;
-            min-height: 100vh;
+            touch-action: pan-y;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Container */
-        .app-container {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        /* Navigation Bar */
-        .nav-bar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: var(--blur);
-            border-bottom: 0.5px solid var(--separator);
-            -webkit-backdrop-filter: var(--blur);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .nav-bar {
-                background: rgba(29, 29, 31, 0.72);
-            }
-        }
-
-        .nav-content {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 12px 20px;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: clamp(24px, 5vw, 36px);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .calculator-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .calculator-section:hover {
+            border-color: var(--accent-dim);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--accent);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
         }
 
-        .nav-title {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-
-        .nav-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        /* Segmented Control */
-        .segmented-control {
-            display: inline-flex;
-            background: var(--gray-100);
-            border-radius: 9px;
-            padding: 2px;
-            position: relative;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .segmented-control {
-                background: var(--gray-800);
-            }
-        }
-
-        .segment-button {
-            padding: 6px 16px;
-            border: none;
-            background: transparent;
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 7px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            z-index: 2;
-            white-space: nowrap;
-        }
-
-        .segment-button.active {
-            background: var(--surface-elevated);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Main Content */
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Grid Layout */
-        .content-grid {
-            display: grid;
-            grid-template-columns: minmax(320px, 400px) 1fr;
-            gap: 20px;
-            width: 100%;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--surface-elevated);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .card-header {
-            padding: 16px 20px;
-            border-bottom: 0.5px solid var(--separator);
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-
-        .card-subtitle {
-            font-size: 13px;
-            color: var(--text-tertiary);
-            margin-top: 2px;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 10px 12px;
-            border: 0.5px solid var(--gray-300);
-            border-radius: 8px;
-            font-size: 16px;
-            background: var(--background);
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-            -webkit-appearance: none;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--apple-blue);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .input-field {
-                border-color: var(--gray-600);
-            }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 2px;
         }
 
         .input-group {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: nowrap;
+            margin-bottom: 20px;
         }
 
-        .input-group .input-field {
-            flex: 1;
-            min-width: 0;
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
-        .input-suffix {
-            color: var(--text-tertiary);
-            font-size: 15px;
-            white-space: nowrap;
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Select */
-        .select-field {
+        input, select {
             width: 100%;
-            padding: 10px 32px 10px 12px;
-            border: 0.5px solid var(--gray-300);
+            padding: 12px 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 16px;
-            background: var(--background) url("data:image/svg+xml;charset=UTF-8,%3csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M1 1L7 7L13 1' stroke='%238E8E93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e") no-repeat right 12px center;
-            background-size: 14px;
             color: var(--text-primary);
-            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
             -webkit-appearance: none;
             appearance: none;
         }
 
-        /* Buttons */
-        .button {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: 500;
-            border: none;
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        select {
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            touch-action: manipulation;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0a0a0'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            padding-right: 40px;
         }
 
-        .button-primary {
-            background: var(--apple-blue);
-            color: white;
-        }
-
-        .button-primary:hover {
-            background: #0051D5;
-        }
-
-        .button-primary:active {
-            transform: scale(0.98);
-        }
-
-        .button-secondary {
-            background: var(--gray-100);
-            color: var(--text-primary);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .button-secondary {
-                background: var(--gray-800);
-            }
-        }
-
-        .button-secondary:hover {
-            background: var(--gray-200);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .button-secondary:hover {
-                background: var(--gray-700);
-            }
-        }
-
-        .button-group {
+        .preset-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .button-group .button {
-            flex: 1;
+        .preset-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        /* Stats Grid */
-        .stats-grid {
+        .preset-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .preset-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .result-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .result-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 20px;
         }
 
-        .stat-card {
-            background: var(--surface);
+        .result-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--bg-primary);
             border-radius: 8px;
-            padding: 12px 16px;
+            border: 1px solid var(--border);
         }
 
-        .stat-value {
+        .result-value {
             font-size: 28px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            color: var(--apple-blue);
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 5px;
         }
 
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-top: 2px;
+        .result-value .actual {
+            color: var(--success);
         }
 
-        /* Table */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 15px;
+        .result-value .ideal {
+            font-size: 18px;
+            color: var(--text-secondary);
         }
 
-        .data-table thead {
-            background: var(--surface);
-            border-bottom: 0.5px solid var(--separator);
-        }
-
-        .data-table th {
-            padding: 12px 16px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
+        .result-label {
+            font-size: 12px;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 1px;
         }
 
-        .data-table tbody tr {
-            border-bottom: 0.5px solid var(--separator);
-        }
-
-        .data-table td {
-            padding: 12px 16px;
-            color: var(--text-primary);
-        }
-
-        .data-table .highlight {
-            color: var(--apple-blue);
-            font-weight: 600;
-        }
-
-        /* Cost Card */
-        .cost-card {
-            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
-            border-radius: 12px;
-            padding: 24px;
-            color: white;
+        .specs-table {
+            width: 100%;
             margin-top: 20px;
+            border-collapse: collapse;
         }
 
-        .cost-header {
-            margin-bottom: 20px;
-        }
-
-        .cost-label {
-            font-size: 13px;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .cost-value {
-            font-size: 48px;
-            font-weight: 600;
-            letter-spacing: -0.03em;
-            margin-top: 4px;
-        }
-
-        .cost-breakdown {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 16px;
-        }
-
-        .cost-item {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 8px;
+        .specs-table td {
             padding: 12px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .cost-item-label {
-            font-size: 11px;
-            opacity: 0.9;
-            margin-bottom: 4px;
+        .specs-table td:first-child {
+            color: var(--text-secondary);
+            width: 40%;
         }
 
-        .cost-item-value {
-            font-size: 17px;
-            font-weight: 600;
+        .specs-table td:last-child {
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
-        /* Grid Preview */
-        .grid-preview {
-            background: var(--gray-950);
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+            border: none;
             border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
+            color: var(--bg-primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .led-grid {
-            display: grid;
-            gap: 2px;
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
         }
 
-        .led-cell {
-            width: 12px;
-            height: 12px;
-            background: var(--apple-green);
-            border-radius: 2px;
-            opacity: 0.9;
+        .calculate-btn:active {
+            transform: translateY(0);
         }
 
-        /* Responsive Design */
-        @media (max-width: 968px) {
-            .content-grid {
+        .warning-msg {
+            padding: 12px;
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            color: var(--warning);
+            font-size: 13px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .calculator-section {
+                padding: 20px;
+            }
+            
+            .input-row {
                 grid-template-columns: 1fr;
             }
-
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .nav-content {
-                padding: 12px 16px;
-            }
-
-            .main-content {
-                padding: 16px;
-            }
-
-            .card-body {
-                padding: 16px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .cost-value {
-                font-size: 32px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .data-table {
-                font-size: 13px;
-            }
-
-            .data-table th,
-            .data-table td {
-                padding: 10px 12px;
-            }
-        }
-
-        @media (max-width: 414px) {
-            body {
-                font-size: 16px;
-            }
-
-            .nav-title {
-                font-size: 16px;
-            }
-
-            .segment-button {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .cost-breakdown {
+            
+            .result-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        /* Loading Animation */
-        @keyframes shimmer {
-            0% { background-position: -468px 0; }
-            100% { background-position: 468px 0; }
+        @media (max-width: 480px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .skeleton {
-            background: linear-gradient(90deg, var(--surface) 25%, var(--gray-100) 50%, var(--surface) 75%);
-            background-size: 468px 104px;
-            animation: shimmer 1.5s infinite;
-        }
-
-        /* Hide scrollbar but allow scrolling */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-
-        /* Disclosure */
-        .disclosure {
-            margin-top: 20px;
-        }
-
-        .disclosure-button {
-            width: 100%;
-            padding: 12px 16px;
+        .tabs {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            padding: 12px 20px;
             background: transparent;
             border: none;
+            color: var(--text-secondary);
             cursor: pointer;
-            text-align: left;
-            font-size: 15px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--accent);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .tab:hover {
             color: var(--text-primary);
         }
 
-        .disclosure-button:hover {
-            background: var(--gray-50);
+        .tab-content {
+            display: none;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .disclosure-button:hover {
-                background: var(--gray-900);
-            }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
         }
 
-        .disclosure-icon {
-            transition: transform 0.2s ease;
-            color: var(--text-tertiary);
-        }
-
-        .disclosure-icon.open {
-            transform: rotate(90deg);
-        }
-
-        .disclosure-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .disclosure-content.open {
-            max-height: 500px;
-            padding-top: 12px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Navigation -->
-        <nav class="nav-bar">
-            <div class="nav-content">
-                <div class="nav-title">LED 電視牆計算機</div>
-                <div class="nav-controls">
-                    <div class="segmented-control">
-                        <button class="segment-button active" onclick="setMode('purchase', this)">採購</button>
-                        <button class="segment-button" onclick="setMode('rental', this)">租賃</button>
+    <div class="container">
+        <header>
+            <h1>LED顯示屏專業計算器</h1>
+            <div class="subtitle">快速計算各種規格參數</div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('size')">尺寸換算</button>
+            <button class="tab" onclick="switchTab('pixel')">像素計算</button>
+            <button class="tab" onclick="switchTab('power')">電力配置</button>
+            <button class="tab" onclick="switchTab('signal')">訊號規劃</button>
+            <button class="tab" onclick="switchTab('cable')">線材備料</button>
+        </div>
+
+        <!-- 尺寸換算 -->
+        <div id="size-tab" class="tab-content active">
+            <div class="calculator-section">
+                <div class="section-title">設備規格設定</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>LED規格 (點間距)</label>
+                        <select id="pixel-pitch" onchange="calculateAll()">
+                            <optgroup label="超高清 (P0.5-P1.5)">
+                                <option value="0.5">P0.5 室內</option>
+                                <option value="0.6">P0.6 室內</option>
+                                <option value="0.7">P0.7 室內</option>
+                                <option value="0.8">P0.8 室內</option>
+                                <option value="0.9">P0.9 室內</option>
+                                <option value="1.0">P1.0 室內</option>
+                                <option value="1.2">P1.2 室內</option>
+                                <option value="1.25">P1.25 室內</option>
+                                <option value="1.5">P1.5 室內</option>
+                            </optgroup>
+                            <optgroup label="高清 (P1.5-P2.5)">
+                                <option value="1.53">P1.53 室內</option>
+                                <option value="1.56">P1.56 室內</option>
+                                <option value="1.6">P1.6 室內</option>
+                                <option value="1.66">P1.66 室內</option>
+                                <option value="1.8">P1.8 室內</option>
+                                <option value="1.86">P1.86 室內</option>
+                                <option value="1.9">P1.9 室內</option>
+                                <option value="1.95">P1.95 室內</option>
+                                <option value="2.0">P2.0 室內</option>
+                                <option value="2.5">P2.5 室內</option>
+                            </optgroup>
+                            <optgroup label="標準 (P2.5-P4)">
+                                <option value="2.6" selected>P2.6 戶外</option>
+                                <option value="2.8">P2.8 室內/戶外</option>
+                                <option value="2.9">P2.9 室內/戶外</option>
+                                <option value="2.976">P2.976 室內/戶外</option>
+                                <option value="3.0">P3.0 室內/戶外</option>
+                                <option value="3.07">P3.07 室內/戶外</option>
+                                <option value="3.2">P3.2 室內/戶外</option>
+                                <option value="3.5">P3.5 室內/戶外</option>
+                                <option value="3.8">P3.8 室內/戶外</option>
+                                <option value="3.91">P3.91 室內/戶外</option>
+                                <option value="4.0">P4.0 室內/戶外</option>
+                            </optgroup>
+                            <optgroup label="戶外 (P4-P8)">
+                                <option value="4.62">P4.62 戶外</option>
+                                <option value="4.81">P4.81 戶外</option>
+                                <option value="5.0">P5.0 戶外</option>
+                                <option value="5.2">P5.2 戶外</option>
+                                <option value="5.95">P5.95 戶外</option>
+                                <option value="6.0">P6.0 戶外</option>
+                                <option value="6.25">P6.25 戶外</option>
+                                <option value="6.67">P6.67 戶外</option>
+                                <option value="7.0">P7.0 戶外</option>
+                                <option value="7.62">P7.62 戶外</option>
+                                <option value="8.0">P8.0 戶外</option>
+                            </optgroup>
+                            <option value="custom">自訂規格</option>
+                        </select>
+                    </div>
+                    <div id="custom-pitch-container" style="display: none;">
+                        <label>自訂點間距 (mm)</label>
+                        <input type="number" id="custom-pitch" step="0.01" placeholder="輸入點間距" onchange="calculateAll()">
                     </div>
                 </div>
-            </div>
-        </nav>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Stats Bar -->
-            <div class="stats-grid" id="statsBar" style="display: none;">
-                <div class="stat-card">
-                    <div class="stat-value" id="quickWidth">-</div>
-                    <div class="stat-label">寬度 (m)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="quickHeight">-</div>
-                    <div class="stat-label">高度 (m)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="quickModules">-</div>
-                    <div class="stat-label">模組數</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="quickResolution">-</div>
-                    <div class="stat-label">解析度</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="quickPower">-</div>
-                    <div class="stat-label">功率 (kW)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="quickCost">-</div>
-                    <div class="stat-label">總價 (萬)</div>
-                </div>
-            </div>
-
-            <!-- Content Grid -->
-            <div class="content-grid">
-                <!-- Input Panel -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">參數設定</div>
-                        <div class="card-subtitle">設定您的 LED 電視牆規格</div>
+                <div class="input-row">
+                    <div>
+                        <label>箱體尺寸</label>
+                        <select id="cabinet-size" onchange="calculateAll()">
+                            <option value="500x500" selected>500×500mm (標準)</option>
+                            <option value="500x1000">500×1000mm (長方形)</option>
+                            <option value="576x576">576×576mm</option>
+                            <option value="640x640">640×640mm</option>
+                            <option value="960x960">960×960mm</option>
+                            <option value="custom">自訂尺寸</option>
+                        </select>
                     </div>
-                    <div class="card-body">
-                        <!-- Rental Options -->
-                        <div id="rentalOptions" style="display: none;">
-                            <div class="form-group">
-                                <label class="form-label">租賃天數</label>
-                                <div class="input-group">
-                                    <input type="number" class="input-field" id="rentalDays" value="3" min="1">
-                                    <span class="input-suffix">天</span>
-                                </div>
-                            </div>
+                    <div id="custom-cabinet-container" style="display: none;">
+                        <label>自訂箱體 (寬×高 mm)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="cabinet-width" placeholder="寬" style="flex: 1;" onchange="calculateAll()">
+                            <span style="color: var(--text-secondary); align-self: center;">×</span>
+                            <input type="number" id="cabinet-height" placeholder="高" style="flex: 1;" onchange="calculateAll()">
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Screen Size -->
-                        <div class="form-group">
-                            <label class="form-label">螢幕對角線尺寸</label>
-                            <div class="input-group">
-                                <input type="number" class="input-field" id="screenSize" value="300" min="1">
-                                <span class="input-suffix">吋</span>
-                            </div>
+                <div class="section-title">選擇計算方式</div>
+                
+                <div class="preset-buttons">
+                    <button class="preset-btn active" onclick="setCalculationMode('inch')">已知吋數</button>
+                    <button class="preset-btn" onclick="setCalculationMode('size')">已知尺寸</button>
+                    <button class="preset-btn" onclick="setCalculationMode('ratio')">已知比例</button>
+                    <button class="preset-btn" onclick="setCalculationMode('venue')">場地限制</button>
+                </div>
+
+                <!-- 已知吋數 -->
+                <div id="mode-inch" class="calculation-mode">
+                    <div class="input-row">
+                        <div>
+                            <label>螢幕吋數</label>
+                            <input type="number" id="screen-inch" placeholder="例如: 300" onchange="calculateFromInch()">
                         </div>
-
-                        <!-- Aspect Ratio -->
-                        <div class="form-group">
-                            <label class="form-label">長寬比例</label>
-                            <select class="select-field" id="aspectRatio">
+                        <div>
+                            <label>螢幕比例</label>
+                            <select id="aspect-ratio-inch" onchange="calculateFromInch()">
                                 <option value="16:9">16:9 (標準)</option>
+                                <option value="16:10">16:10</option>
+                                <option value="4:3">4:3</option>
                                 <option value="21:9">21:9 (超寬)</option>
-                                <option value="4:3">4:3 (傳統)</option>
-                                <option value="custom">自定義</option>
+                                <option value="32:9">32:9 (雙螢幕)</option>
+                                <option value="custom">自訂比例</option>
                             </select>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Custom Ratio -->
-                        <div id="customRatio" style="display: none;" class="form-group">
-                            <label class="form-label">自定義比例</label>
-                            <div class="input-group">
-                                <input type="number" class="input-field" id="customWidth" value="16" min="1">
-                                <span class="input-suffix">:</span>
-                                <input type="number" class="input-field" id="customHeight" value="9" min="1">
-                            </div>
+                <!-- 已知尺寸 -->
+                <div id="mode-size" class="calculation-mode" style="display: none;">
+                    <div class="input-row">
+                        <div>
+                            <label>寬度 (公尺)</label>
+                            <input type="number" id="width-m" step="0.01" placeholder="例如: 10" onchange="calculateFromSize()">
                         </div>
-
-                        <!-- Panel Size -->
-                        <div class="form-group">
-                            <label class="form-label">單片模組尺寸</label>
-                            <div class="input-group">
-                                <input type="number" class="input-field" id="panelWidth" value="500" min="1">
-                                <span class="input-suffix">×</span>
-                                <input type="number" class="input-field" id="panelHeight" value="500" min="1">
-                                <span class="input-suffix">mm</span>
-                            </div>
-                        </div>
-
-                        <!-- Pixel Pitch -->
-                        <div class="form-group">
-                            <label class="form-label">像素間距 (Pixel Pitch)</label>
-                            <div class="input-group">
-                                <input type="number" class="input-field" id="pixelPitch" value="8" min="0.1" step="0.1">
-                                <span class="input-suffix">mm</span>
-                            </div>
-                        </div>
-
-                        <!-- Advanced Settings -->
-                        <div class="disclosure">
-                            <button class="disclosure-button" onclick="toggleAdvanced()">
-                                進階設定
-                                <span class="disclosure-icon" id="advancedIcon">▶</span>
-                            </button>
-                            <div class="disclosure-content" id="advancedContent">
-                                <div class="form-group">
-                                    <label class="form-label">單片模組功耗</label>
-                                    <div class="input-group">
-                                        <input type="number" class="input-field" id="panelPower" value="50" min="1">
-                                        <span class="input-suffix">W</span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">控制卡負載能力</label>
-                                    <div class="input-group">
-                                        <input type="number" class="input-field" id="controlCardCapacity" value="655360" min="1">
-                                        <span class="input-suffix">像素</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="button-group">
-                            <button class="button button-primary" onclick="calculate()">計算</button>
-                            <button class="button button-secondary" onclick="reset()">重置</button>
+                        <div>
+                            <label>高度 (公尺)</label>
+                            <input type="number" id="height-m" step="0.01" placeholder="例如: 5.625" onchange="calculateFromSize()">
                         </div>
                     </div>
                 </div>
 
-                <!-- Results Panel -->
-                <div id="resultsPanel" style="display: none;">
-                    <!-- Module Config Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">配置結果</div>
+                <!-- 已知比例 -->
+                <div id="mode-ratio" class="calculation-mode" style="display: none;">
+                    <div class="input-row">
+                        <div>
+                            <label>單一維度 (公尺)</label>
+                            <select id="dimension-type" onchange="calculateFromRatio()">
+                                <option value="width">已知寬度</option>
+                                <option value="height">已知高度</option>
+                            </select>
                         </div>
-                        <div class="card-body">
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-value" id="actualWidth">-</div>
-                                    <div class="stat-label">實際寬度</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="actualHeight">-</div>
-                                    <div class="stat-label">實際高度</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="totalArea">-</div>
-                                    <div class="stat-label">總面積</div>
-                                </div>
-                            </div>
-
-                            <!-- Visual Preview -->
-                            <div class="grid-preview" id="gridPreview">
-                                <div id="ledGrid"></div>
-                            </div>
+                        <div>
+                            <label>數值</label>
+                            <input type="number" id="dimension-value" step="0.01" placeholder="輸入尺寸" onchange="calculateFromRatio()">
                         </div>
                     </div>
-
-                    <!-- Cable Details -->
-                    <div class="card" style="margin-top: 20px;">
-                        <div class="card-header">
-                            <div class="card-title">配件清單</div>
-                        </div>
-                        <div class="card-body">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>品項</th>
-                                        <th>數量</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>LED 模組</td>
-                                        <td class="highlight" id="moduleCount">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>發送卡</td>
-                                        <td class="highlight" id="senderCards">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>接收卡</td>
-                                        <td class="highlight" id="receiverCards">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>網路線 (總計)</td>
-                                        <td class="highlight" id="totalNetworkCables">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>電源線 (總計)</td>
-                                        <td class="highlight" id="totalPowerCables">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>航空箱</td>
-                                        <td class="highlight" id="flightCases">-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="input-row">
+                        <div>
+                            <label>目標比例</label>
+                            <select id="aspect-ratio-target" onchange="calculateFromRatio()">
+                                <option value="16:9">16:9</option>
+                                <option value="16:10">16:10</option>
+                                <option value="4:3">4:3</option>
+                                <option value="21:9">21:9</option>
+                            </select>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Cost Summary -->
-                    <div class="cost-card">
-                        <div class="cost-header">
-                            <div class="cost-label">總費用</div>
-                            <div class="cost-value" id="totalCost">NT$ 0</div>
+                <!-- 場地限制 -->
+                <div id="mode-venue" class="calculation-mode" style="display: none;">
+                    <div class="input-row">
+                        <div>
+                            <label>場地最大寬度 (公尺)</label>
+                            <input type="number" id="venue-width" step="0.01" placeholder="例如: 12" onchange="calculateFromVenue()">
                         </div>
-                        <div class="cost-breakdown">
-                            <div class="cost-item">
-                                <div class="cost-item-label">模組費用</div>
-                                <div class="cost-item-value" id="moduleCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label">控制系統</div>
-                                <div class="cost-item-value" id="controlCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label">線材配件</div>
-                                <div class="cost-item-value" id="cableCost">-</div>
-                            </div>
-                            <div class="cost-item">
-                                <div class="cost-item-label">其他費用</div>
-                                <div class="cost-item-value" id="otherCost">-</div>
-                            </div>
+                        <div>
+                            <label>場地最大高度 (公尺)</label>
+                            <input type="number" id="venue-height" step="0.01" placeholder="例如: 6" onchange="calculateFromVenue()">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div>
+                            <label>保持比例</label>
+                            <select id="venue-ratio" onchange="calculateFromVenue()">
+                                <option value="16:9">16:9</option>
+                                <option value="16:10">16:10</option>
+                                <option value="4:3">4:3</option>
+                                <option value="fit">最大化利用</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-value" id="result-inch">--</div>
+                            <div class="result-label">吋</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="result-width">--</div>
+                            <div class="result-label">寬度(M)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="result-height">--</div>
+                            <div class="result-label">高度(M)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="result-area">--</div>
+                            <div class="result-label">面積(M²)</div>
+                        </div>
+                    </div>
+                    
+                    <table class="specs-table">
+                        <tr>
+                            <td>解析度</td>
+                            <td id="result-resolution">-- × -- 像素</td>
+                        </tr>
+                        <tr>
+                            <td>總像素數</td>
+                            <td id="result-pixels">--</td>
+                        </tr>
+                        <tr>
+                            <td>箱體數量</td>
+                            <td id="result-cabinets">--</td>
+                        </tr>
+                        <tr>
+                            <td>實際比例</td>
+                            <td id="result-ratio">--</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning-msg" id="warning">
+                    注意：實際拼接可能因箱體尺寸限制而有所調整
+                </div>
+            </div>
+        </div>
+
+        <!-- 像素計算 -->
+        <div id="pixel-tab" class="tab-content">
+            <div class="calculator-section">
+                <div class="section-title">像素密度計算</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>點間距 (mm)</label>
+                        <input type="number" id="pixel-pitch-calc" step="0.01" value="2.6" onchange="calculatePixelDensity()">
+                    </div>
+                    <div>
+                        <label>顯示面積 (m²)</label>
+                        <input type="number" id="display-area" step="0.01" placeholder="輸入面積" onchange="calculatePixelDensity()">
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-value" id="pixel-density">--</div>
+                            <div class="result-label">像素/m²</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="total-pixels-area">--</div>
+                            <div class="result-label">總像素</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="viewing-distance">--</div>
+                            <div class="result-label">最佳觀看距離(M)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="min-viewing">--</div>
+                            <div class="result-label">最小觀看距離(M)</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- 電力配置 -->
+        <div id="power-tab" class="tab-content">
+            <div class="calculator-section">
+                <div class="section-title">電力需求計算</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>顯示屏面積 (m²)</label>
+                        <input type="number" id="power-area" step="0.01" placeholder="輸入面積" onchange="calculatePower()">
+                    </div>
+                    <div>
+                        <label>屏幕類型</label>
+                        <select id="screen-type" onchange="calculatePower()">
+                            <option value="outdoor">戶外屏 (高亮度)</option>
+                            <option value="indoor">室內屏 (標準)</option>
+                            <option value="rental">租賃屏 (節能)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>亮度設定 (%)</label>
+                        <input type="number" id="brightness" value="100" min="10" max="100" step="10" onchange="calculatePower()">
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-value" id="max-power">--</div>
+                            <div class="result-label">最大功率(KW)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="avg-power">--</div>
+                            <div class="result-label">平均功率(KW)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="current-220v">--</div>
+                            <div class="result-label">電流@220V(A)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="current-380v">--</div>
+                            <div class="result-label">電流@380V(A)</div>
+                        </div>
+                    </div>
+                    
+                    <table class="specs-table">
+                        <tr>
+                            <td>建議斷路器規格</td>
+                            <td id="breaker-spec">--</td>
+                        </tr>
+                        <tr>
+                            <td>建議電纜規格</td>
+                            <td id="cable-spec">--</td>
+                        </tr>
+                        <tr>
+                            <td>配電箱數量 (預估)</td>
+                            <td id="power-box">--</td>
+                        </tr>
+                        <tr>
+                            <td>UPS容量建議</td>
+                            <td id="ups-spec">--</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 訊號規劃 -->
+        <div id="signal-tab" class="tab-content">
+            <div class="calculator-section">
+                <div class="section-title">訊號配置計算</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>水平解析度</label>
+                        <input type="number" id="h-resolution" placeholder="例如: 1920" onchange="calculateSignal()">
+                    </div>
+                    <div>
+                        <label>垂直解析度</label>
+                        <input type="number" id="v-resolution" placeholder="例如: 1080" onchange="calculateSignal()">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>訊號類型</label>
+                        <select id="signal-type" onchange="calculateSignal()">
+                            <option value="dvi">DVI</option>
+                            <option value="hdmi">HDMI 2.0</option>
+                            <option value="dp">DisplayPort 1.4</option>
+                            <option value="network">網路串接</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>刷新率 (Hz)</label>
+                        <select id="refresh-rate" onchange="calculateSignal()">
+                            <option value="30">30Hz</option>
+                            <option value="60" selected>60Hz</option>
+                            <option value="120">120Hz</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-value" id="bandwidth">--</div>
+                            <div class="result-label">頻寬需求(Gbps)</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="signal-ports">--</div>
+                            <div class="result-label">訊號埠數</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="sending-cards">--</div>
+                            <div class="result-label">發送卡數量</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="receiving-cards">--</div>
+                            <div class="result-label">接收卡數量</div>
+                        </div>
+                    </div>
+                    
+                    <table class="specs-table">
+                        <tr>
+                            <td>處理器建議</td>
+                            <td id="processor-spec">--</td>
+                        </tr>
+                        <tr>
+                            <td>網線需求</td>
+                            <td id="cable-length">--</td>
+                        </tr>
+                        <tr>
+                            <td>光纖建議</td>
+                            <td id="fiber-spec">--</td>
+                        </tr>
+                        <tr>
+                            <td>備份方案</td>
+                            <td id="backup-plan">--</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 線材備料 -->
+        <div id="cable-tab" class="tab-content">
+            <div class="calculator-section">
+                <div class="section-title">LED配置資訊</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>螢幕吋數</label>
+                        <input type="number" id="cable-inch" placeholder="例如: 350" onchange="calculateCableFromInch()">
+                    </div>
+                    <div>
+                        <label>螢幕比例</label>
+                        <select id="cable-aspect-ratio" onchange="calculateCableFromInch()">
+                            <option value="16:9">16:9 (標準)</option>
+                            <option value="16:10">16:10</option>
+                            <option value="4:3">4:3</option>
+                            <option value="21:9">21:9</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>箱體橫向數量</label>
+                        <input type="number" id="cabinet-h-count" readonly style="background: var(--bg-primary);">
+                    </div>
+                    <div>
+                        <label>箱體縱向數量</label>
+                        <input type="number" id="cabinet-v-count" readonly style="background: var(--bg-primary);">
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="section-title">電源配置</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>單箱體功耗 (A)</label>
+                        <input type="number" id="cabinet-current" step="0.1" value="0.5" placeholder="例如: 0.5" onchange="calculateCableConfig()">
+                    </div>
+                    <div>
+                        <label>電源電壓</label>
+                        <select id="power-voltage" onchange="calculateCableConfig()">
+                            <option value="220">220V AC</option>
+                            <option value="110">110V AC</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>主電源線承載 (A)</label>
+                        <input type="number" id="main-cable-capacity" value="15" placeholder="例如: 15" onchange="calculateCableConfig()">
+                    </div>
+                    <div>
+                        <label>安全餘量 (%)</label>
+                        <input type="number" id="safety-margin" value="20" min="10" max="50" placeholder="例如: 20" onchange="calculateCableConfig()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="section-title">訊號配置</div>
+                
+                <div class="input-row">
+                    <div>
+                        <label>單路訊號帶載點數</label>
+                        <input type="number" id="signal-load-points" value="655360" placeholder="例如: 655360" onchange="calculateCableConfig()">
+                    </div>
+                    <div>
+                        <label>單箱體像素點數</label>
+                        <input type="number" id="cabinet-pixels" value="38400" placeholder="192×200=38400" onchange="calculateCableConfig()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="section-title">走線圖示</div>
+                <div style="background: var(--bg-primary); border-radius: 8px; padding: 20px; overflow-x: auto;">
+                    <canvas id="wiring-diagram" style="display: block; margin: 0 auto;"></canvas>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 20px; height: 3px; background: #ff4444;"></div>
+                        <span style="font-size: 12px; color: var(--text-secondary);">電源主線</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 20px; height: 3px; background: #ffaa00;"></div>
+                        <span style="font-size: 12px; color: var(--text-secondary);">電源短串線</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 20px; height: 3px; background: #00d4ff;"></div>
+                        <span style="font-size: 12px; color: var(--text-secondary);">網線</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 20px; height: 3px; background: #00ff88;"></div>
+                        <span style="font-size: 12px; color: var(--text-secondary);">訊號短串線</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="section-title">線材清單</div>
+                
+                <div class="result-card">
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-value" id="power-series">--</div>
+                            <div class="result-label">電源串聯數</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="signal-series">--</div>
+                            <div class="result-label">訊號串聯數</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="power-groups">--</div>
+                            <div class="result-label">電源組數</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="signal-groups">--</div>
+                            <div class="result-label">訊號組數</div>
+                        </div>
+                    </div>
+                    
+                    <table class="specs-table">
+                        <tr>
+                            <td>電源主線 (3米)</td>
+                            <td id="main-power-cables">--</td>
+                        </tr>
+                        <tr>
+                            <td>電源短串線 (0.5米)</td>
+                            <td id="power-jumper-cables">--</td>
+                        </tr>
+                        <tr>
+                            <td>主網線 (50米)</td>
+                            <td id="main-network-cables">--</td>
+                        </tr>
+                        <tr>
+                            <td>訊號短串線 (0.3米)</td>
+                            <td id="signal-jumper-cables">--</td>
+                        </tr>
+                        <tr style="border-top: 2px solid var(--accent);">
+                            <td style="color: var(--accent);">建議備用量 (+10%)</td>
+                            <td id="spare-recommendation" style="color: var(--accent);">--</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning-msg" id="cable-warning" style="display: none;">
+                    注意：實際配置可能因現場環境而調整，建議多備10%線材
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Global state
-        let currentMode = 'purchase';
+        let currentMode = 'inch';
+        let currentTab = 'size';
 
-        // Set mode
-        function setMode(mode, element) {
-            currentMode = mode;
-            document.querySelectorAll('.segment-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            element.classList.add('active');
-
-            const rentalOptions = document.getElementById('rentalOptions');
-            rentalOptions.style.display = mode === 'rental' ? 'block' : 'none';
-        }
-
-        // Toggle advanced settings
-        function toggleAdvanced() {
-            const content = document.getElementById('advancedContent');
-            const icon = document.getElementById('advancedIcon');
-            
-            if (content.classList.contains('open')) {
-                content.classList.remove('open');
-                icon.classList.remove('open');
-            } else {
-                content.classList.add('open');
-                icon.classList.add('open');
+        // 防止縮放和滑動
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) {
+                e.preventDefault();
             }
-        }
+        }, { passive: false });
 
-        // Aspect ratio change handler
-        document.getElementById('aspectRatio').addEventListener('change', function() {
-            const customRatio = document.getElementById('customRatio');
-            customRatio.style.display = this.value === 'custom' ? 'block' : 'none';
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
         });
 
-        // Calculate
-        function calculate() {
-            // Get inputs
-            const screenSize = parseFloat(document.getElementById('screenSize').value);
-            const aspectRatioSelect = document.getElementById('aspectRatio').value;
-            const panelWidth = parseFloat(document.getElementById('panelWidth').value);
-            const panelHeight = parseFloat(document.getElementById('panelHeight').value);
-            const pixelPitch = parseFloat(document.getElementById('pixelPitch').value);
-            const panelPower = parseFloat(document.getElementById('panelPower').value);
-            const controlCardCapacity = parseFloat(document.getElementById('controlCardCapacity').value);
-
-            // Calculate aspect ratio
-            let ratioWidth, ratioHeight;
-            if (aspectRatioSelect === 'custom') {
-                ratioWidth = parseFloat(document.getElementById('customWidth').value);
-                ratioHeight = parseFloat(document.getElementById('customHeight').value);
-            } else {
-                const ratios = {
-                    '16:9': [16, 9],
-                    '21:9': [21, 9],
-                    '4:3': [4, 3]
-                };
-                [ratioWidth, ratioHeight] = ratios[aspectRatioSelect];
-            }
-
-            // Calculate dimensions
-            const inchToMm = 25.4;
-            const diagonal = screenSize * inchToMm;
-            const ratio = ratioWidth / ratioHeight;
-            const height = Math.sqrt(diagonal * diagonal / (1 + ratio * ratio));
-            const width = height * ratio;
-
-            // Calculate modules
-            const panelsWide = Math.ceil(width / panelWidth);
-            const panelsHigh = Math.ceil(height / panelHeight);
-            const totalPanels = panelsWide * panelsHigh;
-
-            // Actual dimensions
-            const actualWidth = panelsWide * panelWidth;
-            const actualHeight = panelsHigh * panelHeight;
-            const totalArea = (actualWidth * actualHeight) / 1000000;
-
-            // Resolution
-            const horizontalRes = Math.floor(actualWidth / pixelPitch);
-            const verticalRes = Math.floor(actualHeight / pixelPitch);
-            const totalPixels = horizontalRes * verticalRes;
-
-            // Control system
-            const senderCards = Math.ceil(totalPixels / controlCardCapacity);
-            const receiverCards = Math.ceil(totalPanels / 2);
-
-            // Cables
-            const networkCables = totalPanels * 2;
-            const powerCables = Math.ceil(totalPanels / 4) * 3;
-
-            // Transport
-            const flightCases = Math.ceil(totalPanels / 6);
-
-            // Power
-            const totalPower = totalPanels * panelPower / 1000;
-
-            // Update quick stats
-            document.getElementById('quickWidth').textContent = (actualWidth/1000).toFixed(1);
-            document.getElementById('quickHeight').textContent = (actualHeight/1000).toFixed(1);
-            document.getElementById('quickModules').textContent = totalPanels;
-            document.getElementById('quickResolution').textContent = `${(totalPixels/1000000).toFixed(1)}M`;
-            document.getElementById('quickPower').textContent = totalPower.toFixed(1);
-
-            // Update results
-            document.getElementById('actualWidth').textContent = `${(actualWidth/1000).toFixed(2)}m`;
-            document.getElementById('actualHeight').textContent = `${(actualHeight/1000).toFixed(2)}m`;
-            document.getElementById('totalArea').textContent = `${totalArea.toFixed(1)}m²`;
-
-            document.getElementById('moduleCount').textContent = `${totalPanels} 片`;
-            document.getElementById('senderCards').textContent = `${senderCards} 張`;
-            document.getElementById('receiverCards').textContent = `${receiverCards} 張`;
-            document.getElementById('totalNetworkCables').textContent = `${networkCables} 條`;
-            document.getElementById('totalPowerCables').textContent = `${powerCables} 條`;
-            document.getElementById('flightCases').textContent = `${flightCases} 個`;
-
-            // Calculate costs
-            let moduleCost, controlCost, cableCost, otherCost, totalCost;
-
-            if (currentMode === 'rental') {
-                const rentalDays = parseFloat(document.getElementById('rentalDays').value) || 3;
-                moduleCost = totalPanels * 2000 * rentalDays;
-                controlCost = (senderCards * 1000 + receiverCards * 200) * rentalDays;
-                cableCost = (networkCables * 50 + powerCables * 100);
-                otherCost = totalArea * 1000;
-            } else {
-                moduleCost = totalPanels * 8000;
-                controlCost = senderCards * 5000 + receiverCards * 800;
-                cableCost = networkCables * 200 + powerCables * 500;
-                otherCost = totalArea * 5000;
-            }
-
-            totalCost = moduleCost + controlCost + cableCost + otherCost;
-
-            document.getElementById('moduleCost').textContent = `$${(moduleCost/1000).toFixed(0)}K`;
-            document.getElementById('controlCost').textContent = `$${(controlCost/1000).toFixed(0)}K`;
-            document.getElementById('cableCost').textContent = `$${(cableCost/1000).toFixed(0)}K`;
-            document.getElementById('otherCost').textContent = `$${(otherCost/1000).toFixed(0)}K`;
-            document.getElementById('totalCost').textContent = `NT$ ${totalCost.toLocaleString()}`;
-            document.getElementById('quickCost').textContent = (totalCost/10000).toFixed(0);
-
-            // Generate grid preview
-            generateGridPreview(panelsWide, panelsHigh);
-
-            // Show results
-            document.getElementById('statsBar').style.display = 'grid';
-            document.getElementById('resultsPanel').style.display = 'block';
-        }
-
-        // Generate grid preview
-        function generateGridPreview(wide, high) {
-            const maxDisplay = 15;
-            const displayWide = Math.min(wide, maxDisplay);
-            const displayHigh = Math.min(high, maxDisplay);
-
-            let gridHtml = `<div class="led-grid" style="grid-template-columns: repeat(${displayWide}, 1fr);">`;
+        // 切換標籤
+        function switchTab(tab) {
+            currentTab = tab;
             
-            for (let i = 0; i < displayWide * displayHigh; i++) {
-                gridHtml += '<div class="led-cell"></div>';
-            }
+            // 更新標籤樣式
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
             
-            gridHtml += '</div>';
-            document.getElementById('ledGrid').innerHTML = gridHtml;
-        }
-
-        // Reset
-        function reset() {
-            document.getElementById('screenSize').value = 300;
-            document.getElementById('aspectRatio').value = '16:9';
-            document.getElementById('panelWidth').value = 500;
-            document.getElementById('panelHeight').value = 500;
-            document.getElementById('pixelPitch').value = 8;
-            document.getElementById('statsBar').style.display = 'none';
-            document.getElementById('resultsPanel').style.display = 'none';
-        }
-
-        // Initialize
-        window.onload = function() {
-            // Prevent zoom on double tap
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(event) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-
-            // Prevent pinch zoom
-            document.addEventListener('gesturestart', function(e) {
-                e.preventDefault();
+            // 顯示對應內容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
             });
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
 
-            // Auto calculate
-            calculate();
-        };
+        // 設置計算模式
+        function setCalculationMode(mode) {
+            currentMode = mode;
+            
+            // 更新按鈕樣式
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 顯示對應輸入區域
+            document.querySelectorAll('.calculation-mode').forEach(m => {
+                m.style.display = 'none';
+            });
+            document.getElementById(`mode-${mode}`).style.display = 'block';
+        }
+
+        // 監聽像素間距選擇
+        document.getElementById('pixel-pitch').addEventListener('change', function() {
+            const customContainer = document.getElementById('custom-pitch-container');
+            if (this.value === 'custom') {
+                customContainer.style.display = 'block';
+            } else {
+                customContainer.style.display = 'none';
+            }
+        });
+
+        // 監聽箱體尺寸選擇
+        document.getElementById('cabinet-size').addEventListener('change', function() {
+            const customContainer = document.getElementById('custom-cabinet-container');
+            if (this.value === 'custom') {
+                customContainer.style.display = 'block';
+            } else {
+                customContainer.style.display = 'none';
+            }
+        });
+
+        // 獲取當前像素間距
+        function getCurrentPitch() {
+            const pitchSelect = document.getElementById('pixel-pitch');
+            if (pitchSelect.value === 'custom') {
+                return parseFloat(document.getElementById('custom-pitch').value) || 2.6;
+            }
+            return parseFloat(pitchSelect.value);
+        }
+
+        // 獲取當前箱體尺寸
+        function getCabinetSize() {
+            const sizeSelect = document.getElementById('cabinet-size');
+            if (sizeSelect.value === 'custom') {
+                const width = parseFloat(document.getElementById('cabinet-width').value) || 500;
+                const height = parseFloat(document.getElementById('cabinet-height').value) || 500;
+                return { width: width / 1000, height: height / 1000 }; // 轉換為公尺
+            }
+            const [width, height] = sizeSelect.value.split('x').map(Number);
+            return { width: width / 1000, height: height / 1000 }; // 轉換為公尺
+        }
+
+        // 從吋數計算
+        function calculateFromInch() {
+            const inch = parseFloat(document.getElementById('screen-inch').value);
+            if (!inch) return;
+            
+            const ratioSelect = document.getElementById('aspect-ratio-inch').value;
+            let widthRatio = 16, heightRatio = 9;
+            
+            if (ratioSelect !== 'custom') {
+                [widthRatio, heightRatio] = ratioSelect.split(':').map(Number);
+            }
+            
+            // 計算對角線與寬高的關係
+            const diagonal = inch * 25.4; // 轉換為mm
+            const ratioFactor = Math.sqrt(widthRatio * widthRatio + heightRatio * heightRatio);
+            const width = (diagonal * widthRatio / ratioFactor) / 1000; // 轉換為公尺
+            const height = (diagonal * heightRatio / ratioFactor) / 1000;
+            
+            updateResults(width, height, inch);
+        }
+
+        // 從尺寸計算
+        function calculateFromSize() {
+            const width = parseFloat(document.getElementById('width-m').value);
+            const height = parseFloat(document.getElementById('height-m').value);
+            
+            if (!width || !height) return;
+            
+            // 計算對角線吋數
+            const diagonal = Math.sqrt(width * width + height * height) * 1000 / 25.4;
+            
+            updateResults(width, height, diagonal);
+        }
+
+        // 從比例計算
+        function calculateFromRatio() {
+            const dimensionType = document.getElementById('dimension-type').value;
+            const value = parseFloat(document.getElementById('dimension-value').value);
+            const ratio = document.getElementById('aspect-ratio-target').value;
+            
+            if (!value) return;
+            
+            const [widthRatio, heightRatio] = ratio.split(':').map(Number);
+            let width, height;
+            
+            if (dimensionType === 'width') {
+                width = value;
+                height = value * heightRatio / widthRatio;
+            } else {
+                height = value;
+                width = value * widthRatio / heightRatio;
+            }
+            
+            const diagonal = Math.sqrt(width * width + height * height) * 1000 / 25.4;
+            updateResults(width, height, diagonal);
+        }
+
+        // 從場地限制計算
+        function calculateFromVenue() {
+            const maxWidth = parseFloat(document.getElementById('venue-width').value);
+            const maxHeight = parseFloat(document.getElementById('venue-height').value);
+            const ratioOption = document.getElementById('venue-ratio').value;
+            
+            if (!maxWidth || !maxHeight) return;
+            
+            let width, height;
+            
+            if (ratioOption === 'fit') {
+                // 最大化利用空間
+                width = maxWidth;
+                height = maxHeight;
+            } else {
+                // 保持比例
+                const [widthRatio, heightRatio] = ratioOption.split(':').map(Number);
+                const venueRatio = maxWidth / maxHeight;
+                const targetRatio = widthRatio / heightRatio;
+                
+                if (venueRatio > targetRatio) {
+                    // 高度限制
+                    height = maxHeight;
+                    width = height * targetRatio;
+                } else {
+                    // 寬度限制
+                    width = maxWidth;
+                    height = width / targetRatio;
+                }
+            }
+            
+            const diagonal = Math.sqrt(width * width + height * height) * 1000 / 25.4;
+            updateResults(width, height, diagonal);
+        }
+
+        // 更新結果顯示（改進版）
+        function updateResults(idealWidth, idealHeight, idealInch) {
+            const pitch = getCurrentPitch();
+            const cabinet = getCabinetSize();
+            
+            // 計算最接近的箱體配置（使用Math.round）
+            const cabinetsH = Math.round(idealWidth / cabinet.width);
+            const cabinetsV = Math.round(idealHeight / cabinet.height);
+            
+            // 實際尺寸（根據箱體數量）
+            const actualWidth = cabinetsH * cabinet.width;
+            const actualHeight = cabinetsV * cabinet.height;
+            
+            // 實際對角線
+            const actualDiagonal = Math.sqrt(actualWidth * actualWidth + actualHeight * actualHeight) * 1000 / 25.4;
+            
+            // 顯示結果（如果實際與理想不同，顯示兩個值）
+            const widthDiff = Math.abs(actualWidth - idealWidth);
+            const heightDiff = Math.abs(actualHeight - idealHeight);
+            const inchDiff = Math.abs(actualDiagonal - idealInch);
+            
+            if (widthDiff > 0.01) {
+                document.getElementById('result-width').innerHTML = 
+                    `<span class="actual">${actualWidth.toFixed(2)}</span> <span class="ideal">(${idealWidth.toFixed(2)})</span>`;
+            } else {
+                document.getElementById('result-width').textContent = actualWidth.toFixed(2);
+            }
+            
+            if (heightDiff > 0.01) {
+                document.getElementById('result-height').innerHTML = 
+                    `<span class="actual">${actualHeight.toFixed(2)}</span> <span class="ideal">(${idealHeight.toFixed(2)})</span>`;
+            } else {
+                document.getElementById('result-height').textContent = actualHeight.toFixed(2);
+            }
+            
+            if (inchDiff > 1) {
+                document.getElementById('result-inch').innerHTML = 
+                    `<span class="actual">${actualDiagonal.toFixed(0)}</span> <span class="ideal">(${idealInch.toFixed(0)})</span>`;
+            } else {
+                document.getElementById('result-inch').textContent = actualDiagonal.toFixed(0);
+            }
+            
+            document.getElementById('result-area').textContent = (actualWidth * actualHeight).toFixed(2);
+            
+            // 像素計算（基於實際尺寸）
+            const horizontalPixels = Math.floor(actualWidth * 1000 / pitch);
+            const verticalPixels = Math.floor(actualHeight * 1000 / pitch);
+            const totalPixels = horizontalPixels * verticalPixels;
+            
+            document.getElementById('result-resolution').textContent = `${horizontalPixels} × ${verticalPixels} 像素`;
+            document.getElementById('result-pixels').textContent = totalPixels.toLocaleString();
+            
+            // 計算實際比例
+            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+            const divisor = gcd(horizontalPixels, verticalPixels);
+            const ratioWidth = Math.round(horizontalPixels / divisor);
+            const ratioHeight = Math.round(verticalPixels / divisor);
+            document.getElementById('result-ratio').textContent = `${ratioWidth}:${ratioHeight}`;
+            
+            // 顯示箱體數量
+            document.getElementById('result-cabinets').textContent = 
+                `${cabinetsH} × ${cabinetsV} = ${cabinetsH * cabinetsV} 個`;
+            
+            // 顯示警告（如果實際尺寸與需求差異較大）
+            const widthDiffPercent = widthDiff / idealWidth;
+            const heightDiffPercent = heightDiff / idealHeight;
+            
+            if (widthDiffPercent > 0.05 || heightDiffPercent > 0.05) {
+                document.getElementById('warning').textContent = 
+                    `注意：實際拼接尺寸為 ${actualWidth.toFixed(2)}m × ${actualHeight.toFixed(2)}m (${actualDiagonal.toFixed(0)}吋)`;
+                document.getElementById('warning').classList.add('show');
+            } else {
+                document.getElementById('warning').classList.remove('show');
+            }
+        }
+
+        // 像素密度計算
+        function calculatePixelDensity() {
+            const pitch = parseFloat(document.getElementById('pixel-pitch-calc').value);
+            const area = parseFloat(document.getElementById('display-area').value);
+            
+            if (!pitch || !area) return;
+            
+            const pixelsPerMeter = 1000 / pitch;
+            const pixelDensity = pixelsPerMeter * pixelsPerMeter;
+            const totalPixels = pixelDensity * area;
+            
+            // 觀看距離計算
+            const optimalDistance = pitch * 3 / 1000; // 3倍點間距
+            const minDistance = pitch * 1.5 / 1000; // 1.5倍點間距
+            
+            document.getElementById('pixel-density').textContent = Math.floor(pixelDensity).toLocaleString();
+            document.getElementById('total-pixels-area').textContent = Math.floor(totalPixels).toLocaleString();
+            document.getElementById('viewing-distance').textContent = optimalDistance.toFixed(1);
+            document.getElementById('min-viewing').textContent = minDistance.toFixed(1);
+        }
+
+        // 電力計算
+        function calculatePower() {
+            const area = parseFloat(document.getElementById('power-area').value);
+            const screenType = document.getElementById('screen-type').value;
+            const brightness = parseFloat(document.getElementById('brightness').value) / 100;
+            
+            if (!area) return;
+            
+            // 基礎功率密度 (W/m²)
+            const powerDensity = {
+                'outdoor': 800,
+                'indoor': 500,
+                'rental': 400
+            };
+            
+            const basePower = powerDensity[screenType];
+            const maxPower = (basePower * area * brightness) / 1000; // KW
+            const avgPower = maxPower * 0.3; // 平均功率約為最大功率的30%
+            
+            // 電流計算
+            const current220 = (maxPower * 1000) / (220 * 0.8); // 功率因數0.8
+            const current380 = (maxPower * 1000) / (380 * 1.732 * 0.8); // 三相電
+            
+            document.getElementById('max-power').textContent = maxPower.toFixed(2);
+            document.getElementById('avg-power').textContent = avgPower.toFixed(2);
+            document.getElementById('current-220v').textContent = Math.ceil(current220);
+            document.getElementById('current-380v').textContent = Math.ceil(current380);
+            
+            // 配置建議
+            let breakerSpec = '';
+            if (current380 <= 32) breakerSpec = '32A 三相斷路器';
+            else if (current380 <= 63) breakerSpec = '63A 三相斷路器';
+            else if (current380 <= 100) breakerSpec = '100A 三相斷路器';
+            else breakerSpec = `${Math.ceil(current380 / 50) * 50}A 三相斷路器`;
+            
+            document.getElementById('breaker-spec').textContent = breakerSpec;
+            
+            // 電纜規格
+            let cableSpec = '';
+            if (current380 <= 32) cableSpec = '5×6mm² 電纜';
+            else if (current380 <= 63) cableSpec = '5×16mm² 電纜';
+            else if (current380 <= 100) cableSpec = '5×35mm² 電纜';
+            else cableSpec = '5×50mm² 以上電纜';
+            
+            document.getElementById('cable-spec').textContent = cableSpec;
+            
+            // 配電箱數量
+            const boxCount = Math.ceil(maxPower / 30); // 每個配電箱30KW
+            document.getElementById('power-box').textContent = `${boxCount} 個 (每箱30KW)`;
+            
+            // UPS建議
+            const upsCapacity = avgPower * 1.2; // 留20%餘量
+            document.getElementById('ups-spec').textContent = `${Math.ceil(upsCapacity)}KVA 以上`;
+        }
+
+        // 訊號計算
+        function calculateSignal() {
+            const hRes = parseInt(document.getElementById('h-resolution').value);
+            const vRes = parseInt(document.getElementById('v-resolution').value);
+            const signalType = document.getElementById('signal-type').value;
+            const refreshRate = parseInt(document.getElementById('refresh-rate').value);
+            
+            if (!hRes || !vRes) return;
+            
+            // 計算頻寬需求
+            const bandwidth = (hRes * vRes * refreshRate * 24) / 1000000000; // Gbps (24bit色深)
+            document.getElementById('bandwidth').textContent = bandwidth.toFixed(2);
+            
+            // 訊號埠數計算
+            const maxBandwidth = {
+                'dvi': 3.96,
+                'hdmi': 18,
+                'dp': 32.4,
+                'network': 1
+            };
+            
+            const portsNeeded = Math.ceil(bandwidth / maxBandwidth[signalType]);
+            document.getElementById('signal-ports').textContent = portsNeeded;
+            
+            // 發送卡和接收卡
+            const sendingCards = Math.ceil(portsNeeded / 4); // 每張發送卡4個輸出
+            const receivingCards = Math.ceil((hRes * vRes) / (256 * 256)); // 每張接收卡處理256×256像素
+            
+            document.getElementById('sending-cards').textContent = sendingCards;
+            document.getElementById('receiving-cards').textContent = receivingCards;
+            
+            // 處理器建議
+            let processor = '';
+            if (bandwidth < 10) processor = 'NovaStar VX4S';
+            else if (bandwidth < 20) processor = 'NovaStar VX6S';
+            else processor = 'NovaStar 4K處理器';
+            document.getElementById('processor-spec').textContent = processor;
+            
+            // 網線需求
+            const cableLength = receivingCards * 50; // 假設每張卡平均50米
+            document.getElementById('cable-length').textContent = `Cat6 網線約 ${cableLength} 米`;
+            
+            // 光纖建議
+            const fiberSpec = portsNeeded > 2 ? '建議使用光纖傳輸' : '可使用網線傳輸';
+            document.getElementById('fiber-spec').textContent = fiberSpec;
+            
+            // 備份方案
+            document.getElementById('backup-plan').textContent = '建議配置主備雙路訊號';
+        }
+
+        // 通用計算函數
+        function calculateAll() {
+            switch(currentMode) {
+                case 'inch':
+                    calculateFromInch();
+                    break;
+                case 'size':
+                    calculateFromSize();
+                    break;
+                case 'ratio':
+                    calculateFromRatio();
+                    break;
+                case 'venue':
+                    calculateFromVenue();
+                    break;
+            }
+        }
+
+        // 線材計算 - 從吋數開始
+        function calculateCableFromInch() {
+            const inch = parseFloat(document.getElementById('cable-inch').value);
+            if (!inch) return;
+            
+            const ratioSelect = document.getElementById('cable-aspect-ratio').value;
+            let widthRatio = 16, heightRatio = 9;
+            
+            if (ratioSelect !== 'custom') {
+                [widthRatio, heightRatio] = ratioSelect.split(':').map(Number);
+            }
+            
+            // 計算對角線與寬高的關係
+            const diagonal = inch * 25.4; // 轉換為mm
+            const ratioFactor = Math.sqrt(widthRatio * widthRatio + heightRatio * heightRatio);
+            const width = (diagonal * widthRatio / ratioFactor) / 1000; // 轉換為公尺
+            const height = (diagonal * heightRatio / ratioFactor) / 1000;
+            
+            // 獲取箱體尺寸（從主設定）
+            const cabinet = getCabinetSize();
+            
+            // 計算箱體數量
+            const cabinetsH = Math.round(width / cabinet.width);
+            const cabinetsV = Math.round(height / cabinet.height);
+            
+            // 更新顯示
+            document.getElementById('cabinet-h-count').value = cabinetsH;
+            document.getElementById('cabinet-v-count').value = cabinetsV;
+            
+            // 計算線材配置
+            calculateCableConfig();
+        }
+
+        // 計算線材配置
+        function calculateCableConfig() {
+            const cabinetsH = parseInt(document.getElementById('cabinet-h-count').value) || 0;
+            const cabinetsV = parseInt(document.getElementById('cabinet-v-count').value) || 0;
+            
+            if (!cabinetsH || !cabinetsV) return;
+            
+            const totalCabinets = cabinetsH * cabinetsV;
+            
+            // 電源計算
+            const cabinetCurrent = parseFloat(document.getElementById('cabinet-current').value) || 0.5;
+            const mainCableCapacity = parseFloat(document.getElementById('main-cable-capacity').value) || 15;
+            const safetyMargin = parseFloat(document.getElementById('safety-margin').value) || 20;
+            
+            const effectiveCapacity = mainCableCapacity * (1 - safetyMargin / 100);
+            const powerSeriesCount = Math.floor(effectiveCapacity / cabinetCurrent);
+            
+            // 訊號計算
+            const signalLoadPoints = parseInt(document.getElementById('signal-load-points').value) || 655360;
+            const cabinetPixels = parseInt(document.getElementById('cabinet-pixels').value) || 38400;
+            
+            const signalSeriesCount = Math.floor(signalLoadPoints / cabinetPixels);
+            
+            // 計算組數
+            const powerGroups = Math.ceil(totalCabinets / powerSeriesCount);
+            const signalGroups = Math.ceil(totalCabinets / signalSeriesCount);
+            
+            // 更新顯示
+            document.getElementById('power-series').textContent = `${powerSeriesCount} 個/串`;
+            document.getElementById('signal-series').textContent = `${signalSeriesCount} 個/串`;
+            document.getElementById('power-groups').textContent = powerGroups;
+            document.getElementById('signal-groups').textContent = signalGroups;
+            
+            // 計算線材數量
+            const mainPowerCables = powerGroups;
+            const powerJumperCables = totalCabinets - powerGroups; // 每組第一個不需要短串線
+            const mainNetworkCables = signalGroups;
+            const signalJumperCables = totalCabinets - signalGroups;
+            
+            document.getElementById('main-power-cables').textContent = `${mainPowerCables} 條`;
+            document.getElementById('power-jumper-cables').textContent = `${powerJumperCables} 條`;
+            document.getElementById('main-network-cables').textContent = `${mainNetworkCables} 條`;
+            document.getElementById('signal-jumper-cables').textContent = `${signalJumperCables} 條`;
+            
+            // 備用建議
+            const spareText = `電源主線 ${Math.ceil(mainPowerCables * 0.1)} 條、短串線各 ${Math.ceil((powerJumperCables + signalJumperCables) * 0.1)} 條`;
+            document.getElementById('spare-recommendation').textContent = spareText;
+            
+            // 顯示警告
+            document.getElementById('cable-warning').style.display = 'block';
+            
+            // 繪製走線圖
+            drawWiringDiagram(cabinetsH, cabinetsV, powerSeriesCount, signalSeriesCount);
+        }
+
+        // 繪製走線圖
+        function drawWiringDiagram(cols, rows, powerSeries, signalSeries) {
+            const canvas = document.getElementById('wiring-diagram');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // 動態調整箱體大小
+            const maxBoxSize = 50;
+            const minBoxSize = 25;
+            let boxSize = Math.min(maxBoxSize, Math.max(minBoxSize, 600 / Math.max(cols, rows)));
+            const gap = 8;
+            const padding = 80;
+            
+            canvas.width = cols * (boxSize + gap) + padding * 2;
+            canvas.height = rows * (boxSize + gap) + padding * 2 + 100; // 額外空間顯示說明
+            
+            // 清空畫布
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 創建箱體資料陣列
+            const cabinets = [];
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    cabinets.push({
+                        row: row,
+                        col: col,
+                        index: row * cols + col,
+                        powerGroup: -1,
+                        signalGroup: -1,
+                        powerOrder: -1,
+                        signalOrder: -1
+                    });
+                }
+            }
+            
+            // 分配電源組（橫向串聯）
+            let cabinetIndex = 0;
+            let powerGroupId = 0;
+            while (cabinetIndex < cabinets.length) {
+                for (let i = 0; i < powerSeries && cabinetIndex < cabinets.length; i++) {
+                    cabinets[cabinetIndex].powerGroup = powerGroupId;
+                    cabinets[cabinetIndex].powerOrder = i;
+                    cabinetIndex++;
+                }
+                powerGroupId++;
+            }
+            
+            // 分配訊號組（U形或蛇形串聯）
+            cabinetIndex = 0;
+            let signalGroupId = 0;
+            while (cabinetIndex < cabinets.length) {
+                let groupCabinets = [];
+                for (let i = 0; i < signalSeries && cabinetIndex < cabinets.length; i++) {
+                    const cabinet = cabinets[cabinetIndex];
+                    cabinet.signalGroup = signalGroupId;
+                    cabinet.signalOrder = i;
+                    groupCabinets.push(cabinet);
+                    cabinetIndex++;
+                }
+                
+                // 計算U形串聯路徑
+                if (groupCabinets.length > cols) {
+                    // 重新排序為U形
+                    const reordered = [];
+                    let tempRows = Math.ceil(groupCabinets.length / cols);
+                    for (let r = 0; r < tempRows; r++) {
+                        const rowCabs = groupCabinets.slice(r * cols, (r + 1) * cols);
+                        if (r % 2 === 1) {
+                            rowCabs.reverse(); // 偶數行反向
+                        }
+                        reordered.push(...rowCabs);
+                    }
+                    reordered.forEach((cab, idx) => {
+                        cab.signalOrder = idx;
+                    });
+                }
+                
+                signalGroupId++;
+            }
+            
+            // 顏色配置
+            const powerColors = ['#ff4444', '#ff6666', '#ff8888', '#ffaaaa'];
+            const signalColors = ['#00d4ff', '#33ddff', '#66e8ff', '#99f0ff'];
+            
+            // 繪製箱體
+            cabinets.forEach(cabinet => {
+                const x = padding + cabinet.col * (boxSize + gap);
+                const y = padding + cabinet.row * (boxSize + gap);
+                
+                // 箱體背景（根據組別著色）
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fillRect(x, y, boxSize, boxSize);
+                
+                // 電源組標記（左半邊）
+                ctx.fillStyle = powerColors[cabinet.powerGroup % powerColors.length];
+                ctx.globalAlpha = 0.3;
+                ctx.fillRect(x, y, boxSize/2 - 1, boxSize);
+                ctx.globalAlpha = 1;
+                
+                // 訊號組標記（右半邊）
+                ctx.fillStyle = signalColors[cabinet.signalGroup % signalColors.length];
+                ctx.globalAlpha = 0.3;
+                ctx.fillRect(x + boxSize/2 + 1, y, boxSize/2 - 1, boxSize);
+                ctx.globalAlpha = 1;
+                
+                // 箱體邊框
+                ctx.strokeStyle = '#666666';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x, y, boxSize, boxSize);
+                
+                // 中間分隔線
+                ctx.strokeStyle = '#333333';
+                ctx.beginPath();
+                ctx.moveTo(x + boxSize/2, y);
+                ctx.lineTo(x + boxSize/2, y + boxSize);
+                ctx.stroke();
+                
+                // 箱體編號
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `${Math.max(10, boxSize/4)}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(cabinet.index + 1, x + boxSize/2, y + boxSize/2);
+                
+                // 組別標記（小字）
+                if (boxSize >= 40) {
+                    ctx.font = '9px Arial';
+                    ctx.fillStyle = '#ffaa00';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(`P${cabinet.powerGroup + 1}`, x + 2, y + boxSize - 2);
+                    
+                    ctx.fillStyle = '#00ff88';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(`S${cabinet.signalGroup + 1}`, x + boxSize - 2, y + boxSize - 2);
+                }
+            });
+            
+            // 繪製連線指示（簡化版）
+            // 電源連線（橫向）
+            for (let group = 0; group < Math.ceil(cabinets.length / powerSeries); group++) {
+                const groupCabs = cabinets.filter(c => c.powerGroup === group).sort((a, b) => a.powerOrder - b.powerOrder);
+                if (groupCabs.length < 2) continue;
+                
+                ctx.strokeStyle = powerColors[group % powerColors.length];
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 3]);
+                ctx.beginPath();
+                
+                for (let i = 0; i < groupCabs.length - 1; i++) {
+                    const cab1 = groupCabs[i];
+                    const cab2 = groupCabs[i + 1];
+                    const x1 = padding + cab1.col * (boxSize + gap) + boxSize/4;
+                    const y1 = padding + cab1.row * (boxSize + gap) + boxSize/2;
+                    const x2 = padding + cab2.col * (boxSize + gap) + boxSize/4;
+                    const y2 = padding + cab2.row * (boxSize + gap) + boxSize/2;
+                    
+                    if (i === 0) ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                }
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // 訊號連線（U形或蛇形）
+            for (let group = 0; group < Math.ceil(cabinets.length / signalSeries); group++) {
+                const groupCabs = cabinets.filter(c => c.signalGroup === group).sort((a, b) => a.signalOrder - b.signalOrder);
+                if (groupCabs.length < 2) continue;
+                
+                ctx.strokeStyle = signalColors[group % signalColors.length];
+                ctx.lineWidth = 2;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                
+                for (let i = 0; i < groupCabs.length - 1; i++) {
+                    const cab1 = groupCabs[i];
+                    const cab2 = groupCabs[i + 1];
+                    const x1 = padding + cab1.col * (boxSize + gap) + boxSize * 3/4;
+                    const y1 = padding + cab1.row * (boxSize + gap) + boxSize/2;
+                    const x2 = padding + cab2.col * (boxSize + gap) + boxSize * 3/4;
+                    const y2 = padding + cab2.row * (boxSize + gap) + boxSize/2;
+                    
+                    if (i === 0) ctx.moveTo(x1, y1);
+                    
+                    // 如果跨行，畫弧線
+                    if (cab1.row !== cab2.row || Math.abs(cab1.col - cab2.col) > 1) {
+                        const midX = (x1 + x2) / 2;
+                        const midY = Math.min(y1, y2) - 20;
+                        ctx.quadraticCurveTo(midX, midY, x2, y2);
+                    } else {
+                        ctx.lineTo(x2, y2);
+                    }
+                }
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // 圖例說明
+            const legendY = canvas.height - 70;
+            
+            // 標題
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('串聯配置說明', padding, legendY - 20);
+            
+            // 電源說明
+            ctx.fillStyle = powerColors[0];
+            ctx.fillRect(padding, legendY, 20, 10);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '12px Arial';
+            ctx.fillText(`電源串聯: 每${powerSeries}個一組，橫向串接`, padding + 30, legendY + 8);
+            
+            // 訊號說明
+            ctx.fillStyle = signalColors[0];
+            ctx.fillRect(padding, legendY + 20, 20, 10);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.fillText(`訊號串聯: 每${signalSeries}個一組，U形串接`, padding + 30, legendY + 28);
+            
+            // 標記說明
+            ctx.fillStyle = '#666666';
+            ctx.font = '11px Arial';
+            ctx.fillText('左半部=電源組別(P)，右半部=訊號組別(S)', padding, legendY + 48);
+            
+            // 統計資訊
+            const totalPowerGroups = Math.ceil(cabinets.length / powerSeries);
+            const totalSignalGroups = Math.ceil(cabinets.length / signalSeries);
+            ctx.fillStyle = '#00d4ff';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText(`共${totalPowerGroups}組電源，${totalSignalGroups}組訊號`, canvas.width - padding, legendY + 8);
+        }
     </script>
 </body>
 </html>
