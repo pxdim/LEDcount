@@ -2,1173 +2,909 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LED電視牆專業計算系統 - RWD Pro版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>LED電視牆計算機</title>
     <style>
+        /* Apple System Font Stack */
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local(-apple-system), local(BlinkMacSystemFont);
+        }
+
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --border: #e2e8f0;
-            --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-            --radius: 12px;
-            --radius-lg: 16px;
+            /* Apple Colors */
+            --apple-blue: #007AFF;
+            --apple-purple: #5856D6;
+            --apple-pink: #FF2D55;
+            --apple-orange: #FF9500;
+            --apple-yellow: #FFCC00;
+            --apple-green: #34C759;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            
+            /* Grays */
+            --gray-50: #F2F2F7;
+            --gray-100: #E5E5EA;
+            --gray-200: #D1D1D6;
+            --gray-300: #C7C7CC;
+            --gray-400: #AEAEB2;
+            --gray-500: #8E8E93;
+            --gray-600: #636366;
+            --gray-700: #48484A;
+            --gray-800: #3A3A3C;
+            --gray-900: #2C2C2E;
+            --gray-950: #1C1C1E;
+            
+            /* Semantic Colors */
+            --background: #FFFFFF;
+            --surface: #F2F2F7;
+            --surface-elevated: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #3C3C43;
+            --text-tertiary: #8E8E93;
+            --separator: rgba(60, 60, 67, 0.12);
+            
+            /* Effects */
+            --blur: saturate(180%) blur(20px);
+            --shadow-sm: 0 0 1px 0 rgba(0,0,0,0.04), 0 2px 4px 0 rgba(0,0,0,0.06);
+            --shadow-md: 0 0 1px 0 rgba(0,0,0,0.04), 0 4px 8px 0 rgba(0,0,0,0.08);
+            --shadow-lg: 0 0 1px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(0,0,0,0.12);
+            --shadow-xl: 0 0 1px 0 rgba(0,0,0,0.04), 0 24px 48px 0 rgba(0,0,0,0.16);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #000000;
+                --surface: #1C1C1E;
+                --surface-elevated: #2C2C2E;
+                --text-primary: #FFFFFF;
+                --text-secondary: #EBEBF5;
+                --text-tertiary: #8E8E93;
+                --separator: rgba(84, 84, 88, 0.65);
+            }
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            overflow-x: hidden;
+            touch-action: pan-y;
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, system-ui, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--surface);
+            color: var(--text-primary);
+            line-height: 1.47059;
+            font-size: 17px;
+            overflow-x: hidden;
+            width: 100%;
             min-height: 100vh;
-            padding: 0;
-            margin: 0;
         }
 
         /* Container */
         .app-container {
-            max-width: 1920px;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: var(--blur);
+            border-bottom: 0.5px solid var(--separator);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .nav-bar {
+                background: rgba(29, 29, 31, 0.72);
+            }
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Segmented Control */
+        .segmented-control {
+            display: inline-flex;
+            background: var(--gray-100);
+            border-radius: 9px;
+            padding: 2px;
+            position: relative;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .segmented-control {
+                background: var(--gray-800);
+            }
+        }
+
+        .segment-button {
+            padding: 6px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .segment-button.active {
+            background: var(--surface-elevated);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            color: white;
-        }
-
-        .title {
-            font-size: 1.5em;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .mode-selector {
-            display: flex;
-            background: var(--light);
-            border-radius: 10px;
-            padding: 4px;
-            gap: 4px;
-        }
-
-        .mode-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #64748b;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .mode-btn.active {
-            background: white;
-            color: var(--primary);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Main Layout */
-        .main-layout {
+        /* Grid Layout */
+        .content-grid {
             display: grid;
-            grid-template-columns: 400px 1fr;
+            grid-template-columns: minmax(320px, 400px) 1fr;
             gap: 20px;
+            width: 100%;
         }
 
         /* Cards */
         .card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow);
+            background: var(--surface-elevated);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
 
         .card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .card-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2em;
+            padding: 16px 20px;
+            border-bottom: 0.5px solid var(--separator);
         }
 
         .card-title {
-            font-size: 1.2em;
+            font-size: 20px;
             font-weight: 600;
-            color: var(--dark);
+            letter-spacing: -0.02em;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .card-body {
+            padding: 20px;
         }
 
         /* Form Elements */
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .form-label {
             display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
             margin-bottom: 6px;
-            font-size: 0.875em;
             font-weight: 500;
-            color: #475569;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 12px;
+            border: 0.5px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--background);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .input-field {
+                border-color: var(--gray-600);
+            }
         }
 
         .input-group {
             display: flex;
             gap: 8px;
             align-items: center;
+            flex-wrap: nowrap;
         }
 
-        .form-input {
+        .input-group .input-field {
             flex: 1;
-            padding: 10px 14px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.95em;
-            transition: all 0.3s;
+            min-width: 0;
         }
 
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        .input-suffix {
+            color: var(--text-tertiary);
+            font-size: 15px;
+            white-space: nowrap;
         }
 
-        .form-select {
+        /* Select */
+        .select-field {
             width: 100%;
-            padding: 10px 14px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.95em;
-            background: white;
+            padding: 10px 32px 10px 12px;
+            border: 0.5px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--background) url("data:image/svg+xml;charset=UTF-8,%3csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M1 1L7 7L13 1' stroke='%238E8E93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e") no-repeat right 12px center;
+            background-size: 14px;
+            color: var(--text-primary);
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .input-unit {
-            color: #94a3b8;
-            font-size: 0.875em;
-            font-weight: 500;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         /* Buttons */
-        .btn {
-            padding: 12px 24px;
+        .button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 500;
             border: none;
-            border-radius: 10px;
-            font-size: 0.95em;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
+            touch-action: manipulation;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        .button-primary {
+            background: var(--apple-blue);
             color: white;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        .button-primary:hover {
+            background: #0051D5;
         }
 
-        .btn-secondary {
-            background: var(--light);
-            color: #475569;
+        .button-primary:active {
+            transform: scale(0.98);
         }
 
-        .btn-secondary:hover {
-            background: #e2e8f0;
+        .button-secondary {
+            background: var(--gray-100);
+            color: var(--text-primary);
         }
 
-        .btn-group {
+        @media (prefers-color-scheme: dark) {
+            .button-secondary {
+                background: var(--gray-800);
+            }
+        }
+
+        .button-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .button-secondary:hover {
+                background: var(--gray-700);
+            }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button-group .button {
+            flex: 1;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        /* Results Grid */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        /* Stat Cards */
         .stat-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-radius: var(--radius);
-            padding: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
-        }
-
-        .stat-label {
-            font-size: 0.75em;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 12px 16px;
         }
 
         .stat-value {
-            font-size: 1.75em;
-            font-weight: 700;
-            color: var(--dark);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--apple-blue);
         }
 
-        .stat-value.primary {
-            color: var(--primary);
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 2px;
         }
 
-        .stat-unit {
-            font-size: 0.5em;
-            color: #94a3b8;
-            margin-left: 4px;
-        }
-
-        /* Cable Details Table */
-        .cable-table {
+        /* Table */
+        .data-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 16px;
+            border-collapse: collapse;
+            font-size: 15px;
         }
 
-        .cable-table thead {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        .data-table thead {
+            background: var(--surface);
+            border-bottom: 0.5px solid var(--separator);
         }
 
-        .cable-table th {
+        .data-table th {
             padding: 12px 16px;
             text-align: left;
-            font-size: 0.875em;
             font-weight: 600;
-            color: white;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
-        .cable-table th:first-child {
-            border-radius: 10px 0 0 0;
+        .data-table tbody tr {
+            border-bottom: 0.5px solid var(--separator);
         }
 
-        .cable-table th:last-child {
-            border-radius: 0 10px 0 0;
-            text-align: right;
-        }
-
-        .cable-table tbody tr {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .cable-table tbody tr:hover {
-            background: #f8fafc;
-        }
-
-        .cable-table td {
+        .data-table td {
             padding: 12px 16px;
-            font-size: 0.875em;
+            color: var(--text-primary);
         }
 
-        .cable-table .category-row {
-            background: #f1f5f9;
+        .data-table .highlight {
+            color: var(--apple-blue);
             font-weight: 600;
-            color: var(--dark);
         }
 
-        .cable-table .category-row td {
-            padding: 10px 16px;
-            font-size: 0.9em;
-        }
-
-        .cable-table .count {
-            text-align: right;
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1em;
-        }
-
-        /* Visual Grid Preview */
-        .grid-preview {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #1e293b;
-            border-radius: var(--radius);
-            margin: 16px 0;
-        }
-
-        .led-grid {
-            display: inline-grid;
-            gap: 2px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-        }
-
-        .led-module {
-            width: 16px;
-            height: 16px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 2px;
-            position: relative;
-        }
-
-        .led-module::after {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 1px;
-        }
-
-        /* Cost Summary */
+        /* Cost Card */
         .cost-card {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+            border-radius: 12px;
             padding: 24px;
+            color: white;
             margin-top: 20px;
         }
 
         .cost-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
         }
 
-        .cost-title {
-            font-size: 1.1em;
+        .cost-label {
+            font-size: 13px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .cost-value {
+            font-size: 48px;
             font-weight: 600;
-            opacity: 0.9;
+            letter-spacing: -0.03em;
+            margin-top: 4px;
         }
 
-        .cost-total {
-            font-size: 2em;
-            font-weight: 700;
-        }
-
-        .cost-grid {
+        .cost-breakdown {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
         }
 
         .cost-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
+            border-radius: 8px;
             padding: 12px;
-            border-radius: 10px;
         }
 
         .cost-item-label {
-            font-size: 0.75em;
-            opacity: 0.8;
+            font-size: 11px;
+            opacity: 0.9;
             margin-bottom: 4px;
         }
 
         .cost-item-value {
-            font-size: 1.1em;
+            font-size: 17px;
             font-weight: 600;
+        }
+
+        /* Grid Preview */
+        .grid-preview {
+            background: var(--gray-950);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .led-grid {
+            display: grid;
+            gap: 2px;
+        }
+
+        .led-cell {
+            width: 12px;
+            height: 12px;
+            background: var(--apple-green);
+            border-radius: 2px;
+            opacity: 0.9;
         }
 
         /* Responsive Design */
-        @media (max-width: 1400px) {
-            .main-layout {
-                grid-template-columns: 380px 1fr;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .main-layout {
+        @media (max-width: 968px) {
+            .content-grid {
                 grid-template-columns: 1fr;
             }
 
-            .results-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        @media (max-width: 768px) {
-            .app-container {
-                padding: 10px;
+        @media (max-width: 640px) {
+            .nav-content {
+                padding: 12px 16px;
             }
 
-            .header {
-                padding: 15px;
-            }
-
-            .header-content {
-                flex-direction: column;
-            }
-
-            .title {
-                font-size: 1.2em;
-            }
-
-            .card {
+            .main-content {
                 padding: 16px;
             }
 
-            .results-grid {
-                grid-template-columns: 1fr;
+            .card-body {
+                padding: 16px;
             }
 
-            .cost-grid {
+            .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .btn-group {
-                grid-template-columns: 1fr;
+            .cost-value {
+                font-size: 32px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .data-table {
+                font-size: 13px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px 12px;
             }
         }
 
-        @media (max-width: 480px) {
-            .mode-selector {
-                width: 100%;
+        @media (max-width: 414px) {
+            body {
+                font-size: 16px;
             }
 
-            .mode-btn {
-                flex: 1;
-                font-size: 0.875em;
+            .nav-title {
+                font-size: 16px;
             }
 
-            .stat-value {
-                font-size: 1.5em;
+            .segment-button {
+                padding: 6px 12px;
+                font-size: 12px;
             }
 
-            .cable-table {
-                font-size: 0.8em;
-            }
-
-            .cable-table th,
-            .cable-table td {
-                padding: 8px 12px;
-            }
-
-            .cost-total {
-                font-size: 1.5em;
+            .cost-breakdown {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        /* Animations */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -468px 0; }
+            100% { background-position: 468px 0; }
         }
 
-        .card {
-            animation: slideIn 0.4s ease-out;
-        }
-
-        /* Loading State */
         .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+            background: linear-gradient(90deg, var(--surface) 25%, var(--gray-100) 50%, var(--surface) 75%);
+            background-size: 468px 104px;
+            animation: shimmer 1.5s infinite;
         }
 
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+        /* Hide scrollbar but allow scrolling */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
 
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            cursor: help;
+        /* Disclosure */
+        .disclosure {
+            margin-top: 20px;
         }
 
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--dark);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75em;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover::after {
-            opacity: 1;
-        }
-
-        /* Quick Stats Bar */
-        .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .quick-stat {
-            background: white;
-            padding: 12px;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .quick-stat-value {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .quick-stat-label {
-            font-size: 0.75em;
-            color: #64748b;
-            margin-top: 4px;
-        }
-
-        /* Advanced Settings */
-        .advanced-toggle {
+        .disclosure-button {
             width: 100%;
-            padding: 12px;
-            background: var(--light);
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            color: var(--primary);
-            cursor: pointer;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 16px 0;
-            transition: all 0.3s;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            color: var(--text-primary);
         }
 
-        .advanced-toggle:hover {
-            background: #e2e8f0;
+        .disclosure-button:hover {
+            background: var(--gray-50);
         }
 
-        .advanced-content {
-            display: none;
-            padding-top: 16px;
-            border-top: 2px solid var(--border);
-            margin-top: 16px;
+        @media (prefers-color-scheme: dark) {
+            .disclosure-button:hover {
+                background: var(--gray-900);
+            }
         }
 
-        .advanced-content.show {
-            display: block;
-            animation: slideIn 0.3s ease-out;
+        .disclosure-icon {
+            transition: transform 0.2s ease;
+            color: var(--text-tertiary);
         }
 
-        /* Rental Highlight */
-        .rental-highlight {
-            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-            color: white;
-            padding: 16px;
-            border-radius: var(--radius);
-            margin-bottom: 16px;
+        .disclosure-icon.open {
+            transform: rotate(90deg);
         }
 
-        .rental-highlight h4 {
-            margin-bottom: 12px;
-            font-size: 1em;
+        .disclosure-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: white;
-            font-size: 0.875em;
-            margin-top: 40px;
+        .disclosure-content.open {
+            max-height: 500px;
+            padding-top: 12px;
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="logo">🖥️</div>
-                    <h1 class="title">LED電視牆專業計算系統</h1>
-                </div>
-                <div class="mode-selector">
-                    <button class="mode-btn active" onclick="setMode('purchase')">採購模式</button>
-                    <button class="mode-btn" onclick="setMode('rental')">租賃模式</button>
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <div class="nav-title">LED 電視牆計算機</div>
+                <div class="nav-controls">
+                    <div class="segmented-control">
+                        <button class="segment-button active" onclick="setMode('purchase', this)">採購</button>
+                        <button class="segment-button" onclick="setMode('rental', this)">租賃</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </nav>
 
-        <!-- Quick Stats -->
-        <div class="quick-stats" id="quickStats" style="display:none;">
-            <div class="quick-stat">
-                <div class="quick-stat-value" id="quickWidth">-</div>
-                <div class="quick-stat-label">寬度(m)</div>
-            </div>
-            <div class="quick-stat">
-                <div class="quick-stat-value" id="quickHeight">-</div>
-                <div class="quick-stat-label">高度(m)</div>
-            </div>
-            <div class="quick-stat">
-                <div class="quick-stat-value" id="quickModules">-</div>
-                <div class="quick-stat-label">模組數</div>
-            </div>
-            <div class="quick-stat">
-                <div class="quick-stat-value" id="quickPixels">-</div>
-                <div class="quick-stat-label">像素(M)</div>
-            </div>
-            <div class="quick-stat">
-                <div class="quick-stat-value" id="quickPower">-</div>
-                <div class="quick-stat-label">功率(kW)</div>
-            </div>
-            <div class="quick-stat">
-                <div class="quick-stat-value" id="quickTotal">-</div>
-                <div class="quick-stat-label">總價(萬)</div>
-            </div>
-        </div>
-
-        <!-- Main Layout -->
-        <div class="main-layout">
-            <!-- Input Panel -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">📐</div>
-                    <h2 class="card-title">參數設定</h2>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Stats Bar -->
+            <div class="stats-grid" id="statsBar" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-value" id="quickWidth">-</div>
+                    <div class="stat-label">寬度 (m)</div>
                 </div>
-
-                <!-- Rental Options -->
-                <div id="rentalOptions" class="rental-highlight" style="display:none;">
-                    <h4>🎪 租賃專屬設定</h4>
-                    <div class="form-group">
-                        <label class="form-label">租賃天數</label>
-                        <div class="input-group">
-                            <input type="number" class="form-input" id="rentalDays" value="3" min="1">
-                            <span class="input-unit">天</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">快速選擇規格</label>
-                        <select class="form-select" id="quickSpec" onchange="applyQuickSpec()">
-                            <option value="">-- 自定義 --</option>
-                            <option value="p2.6">P2.6 室內 (500×500mm)</option>
-                            <option value="p3.91">P3.91 室內/戶外 (500×500mm)</option>
-                            <option value="p4.81">P4.81 戶外 (500×500mm)</option>
-                            <option value="p6.25">P6.25 戶外 (500×500mm)</option>
-                        </select>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="quickHeight">-</div>
+                    <div class="stat-label">高度 (m)</div>
                 </div>
-
-                <!-- Basic Parameters -->
-                <div class="form-group">
-                    <label class="form-label">螢幕對角線尺寸</label>
-                    <div class="input-group">
-                        <input type="number" class="form-input" id="screenSize" value="300" min="1">
-                        <span class="input-unit">吋</span>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="quickModules">-</div>
+                    <div class="stat-label">模組數</div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">長寬比例</label>
-                    <select class="form-select" id="aspectRatio">
-                        <option value="16:9">16:9 (標準)</option>
-                        <option value="21:9">21:9 (超寬)</option>
-                        <option value="4:3">4:3 (傳統)</option>
-                        <option value="custom">自定義</option>
-                    </select>
+                <div class="stat-card">
+                    <div class="stat-value" id="quickResolution">-</div>
+                    <div class="stat-label">解析度</div>
                 </div>
-
-                <div id="customRatio" style="display:none;" class="form-group">
-                    <label class="form-label">自定義比例</label>
-                    <div class="input-group">
-                        <input type="number" class="form-input" id="customWidth" value="16" min="1">
-                        <span class="input-unit">:</span>
-                        <input type="number" class="form-input" id="customHeight" value="9" min="1">
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="quickPower">-</div>
+                    <div class="stat-label">功率 (kW)</div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">單片LED模組尺寸</label>
-                    <div class="input-group">
-                        <input type="number" class="form-input" id="panelWidth" value="500" min="1">
-                        <span class="input-unit">×</span>
-                        <input type="number" class="form-input" id="panelHeight" value="500" min="1">
-                        <span class="input-unit">mm</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">
-                        <span class="tooltip" data-tooltip="像素間距越小，解析度越高">像素間距 (Pixel Pitch)</span>
-                    </label>
-                    <div class="input-group">
-                        <input type="number" class="form-input" id="pixelPitch" value="8" min="0.1" step="0.1">
-                        <span class="input-unit">mm</span>
-                    </div>
-                </div>
-
-                <!-- Advanced Settings -->
-                <button class="advanced-toggle" onclick="toggleAdvanced()">
-                    <span>⚙️ 進階設定</span>
-                    <span id="advancedArrow">▼</span>
-                </button>
-                
-                <div id="advancedContent" class="advanced-content">
-                    <div class="form-group">
-                        <label class="form-label">單片模組功耗</label>
-                        <div class="input-group">
-                            <input type="number" class="form-input" id="panelPower" value="50" min="1">
-                            <span class="input-unit">W</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">控制卡負載能力</label>
-                        <div class="input-group">
-                            <input type="number" class="form-input" id="controlCardCapacity" value="655360" min="1">
-                            <span class="input-unit">像素</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">接收卡網口數量</label>
-                        <div class="input-group">
-                            <input type="number" class="form-input" id="receiverPorts" value="2" min="1">
-                            <span class="input-unit">個</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">每組電源帶載模組數</label>
-                        <div class="input-group">
-                            <input type="number" class="form-input" id="powerGroupSize" value="4" min="1">
-                            <span class="input-unit">片</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="calculate()">
-                        <span>📊</span> 計算
-                    </button>
-                    <button class="btn btn-secondary" onclick="reset()">
-                        <span>🔄</span> 重置
-                    </button>
+                <div class="stat-card">
+                    <div class="stat-value" id="quickCost">-</div>
+                    <div class="stat-label">總價 (萬)</div>
                 </div>
             </div>
 
-            <!-- Results Panel -->
-            <div id="resultsPanel" style="display:none;">
-                <!-- Size and Configuration -->
-                <div class="results-grid">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-icon">📏</div>
-                            <h3 class="card-title">尺寸配置</h3>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">實際尺寸</div>
-                            <div class="stat-value primary">
-                                <span id="actualSize">-</span>
-                                <span class="stat-unit">公尺</span>
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
-                            <div class="stat-card">
-                                <div class="stat-label">總面積</div>
-                                <div class="stat-value" id="totalArea">-</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">對角線</div>
-                                <div class="stat-value" id="diagonal">-</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-icon">🔲</div>
-                            <h3 class="card-title">模組配置</h3>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <div class="stat-card">
-                                <div class="stat-label">橫向模組</div>
-                                <div class="stat-value primary" id="panelsWide">-</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">縱向模組</div>
-                                <div class="stat-value primary" id="panelsHigh">-</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">總模組數</div>
-                                <div class="stat-value" id="totalPanels">-</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">備用5%</div>
-                                <div class="stat-value" id="sparePanels">-</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-icon">🖼️</div>
-                            <h3 class="card-title">解析度與像素</h3>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">總解析度</div>
-                            <div class="stat-value primary" id="resolution">-</div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
-                            <div class="stat-card">
-                                <div class="stat-label">總像素</div>
-                                <div class="stat-value" id="totalPixels">-</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">像素密度</div>
-                                <div class="stat-value" id="pixelDensity">-</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cable Details -->
-                <div class="card" style="margin-top: 20px;">
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Input Panel -->
+                <div class="card">
                     <div class="card-header">
-                        <div class="card-icon">🔌</div>
-                        <h3 class="card-title">線材配件詳細清單</h3>
+                        <div class="card-title">參數設定</div>
+                        <div class="card-subtitle">設定您的 LED 電視牆規格</div>
                     </div>
-                    
-                    <table class="cable-table">
-                        <thead>
-                            <tr>
-                                <th>類別</th>
-                                <th>品項</th>
-                                <th>說明</th>
-                                <th>數量</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- 顯示模組 -->
-                            <tr class="category-row">
-                                <td colspan="4">📺 顯示模組</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>LED模組</td>
-                                <td>主要顯示單元</td>
-                                <td class="count" id="moduleCount">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>備用模組</td>
-                                <td>5%備用量</td>
-                                <td class="count" id="spareModuleCount">-</td>
-                            </tr>
-                            
-                            <!-- 控制系統 -->
-                            <tr class="category-row">
-                                <td colspan="4">🎮 控制系統</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>發送卡</td>
-                                <td>視頻信號發送</td>
-                                <td class="count" id="senderCards">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>接收卡</td>
-                                <td>模組信號接收</td>
-                                <td class="count" id="receiverCards">-</td>
-                            </tr>
-                            
-                            <!-- 網路線材 -->
-                            <tr class="category-row">
-                                <td colspan="4">🌐 網路線材</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>主幹網路線</td>
-                                <td>發送卡到第一模組(20m)</td>
-                                <td class="count" id="mainNetworkCables">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>橫向跳線</td>
-                                <td>模組間橫向連接(0.5m)</td>
-                                <td class="count" id="horizontalNetworkCables">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>縱向跳線</td>
-                                <td>模組間縱向連接(0.5m)</td>
-                                <td class="count" id="verticalNetworkCables">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>備用網路線</td>
-                                <td>各種長度備用(1m)</td>
-                                <td class="count" id="spareNetworkCables">-</td>
-                            </tr>
-                            
-                            <!-- 電源線材 -->
-                            <tr class="category-row">
-                                <td colspan="4">⚡ 電源線材</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>主電源線</td>
-                                <td>配電箱到分配器(20m)</td>
-                                <td class="count" id="mainPowerCables">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>分支電源線</td>
-                                <td>分配器到模組組(5m)</td>
-                                <td class="count" id="branchPowerCables">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>模組電源跳線</td>
-                                <td>模組間電源連接(0.5m)</td>
-                                <td class="count" id="modulePowerCables">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>電源分配器</td>
-                                <td>電源分配單元</td>
-                                <td class="count" id="powerDistributors">-</td>
-                            </tr>
-                            
-                            <!-- 其他配件 -->
-                            <tr class="category-row">
-                                <td colspan="4">📦 運輸與配件</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>航空箱</td>
-                                <td>6片/箱</td>
-                                <td class="count" id="flightCases">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>線材箱</td>
-                                <td>線材收納箱</td>
-                                <td class="count" id="cableCases">-</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>工具箱</td>
-                                <td>安裝工具組</td>
-                                <td class="count">1 套</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="card-body">
+                        <!-- Rental Options -->
+                        <div id="rentalOptions" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">租賃天數</label>
+                                <div class="input-group">
+                                    <input type="number" class="input-field" id="rentalDays" value="3" min="1">
+                                    <span class="input-suffix">天</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screen Size -->
+                        <div class="form-group">
+                            <label class="form-label">螢幕對角線尺寸</label>
+                            <div class="input-group">
+                                <input type="number" class="input-field" id="screenSize" value="300" min="1">
+                                <span class="input-suffix">吋</span>
+                            </div>
+                        </div>
+
+                        <!-- Aspect Ratio -->
+                        <div class="form-group">
+                            <label class="form-label">長寬比例</label>
+                            <select class="select-field" id="aspectRatio">
+                                <option value="16:9">16:9 (標準)</option>
+                                <option value="21:9">21:9 (超寬)</option>
+                                <option value="4:3">4:3 (傳統)</option>
+                                <option value="custom">自定義</option>
+                            </select>
+                        </div>
+
+                        <!-- Custom Ratio -->
+                        <div id="customRatio" style="display: none;" class="form-group">
+                            <label class="form-label">自定義比例</label>
+                            <div class="input-group">
+                                <input type="number" class="input-field" id="customWidth" value="16" min="1">
+                                <span class="input-suffix">:</span>
+                                <input type="number" class="input-field" id="customHeight" value="9" min="1">
+                            </div>
+                        </div>
+
+                        <!-- Panel Size -->
+                        <div class="form-group">
+                            <label class="form-label">單片模組尺寸</label>
+                            <div class="input-group">
+                                <input type="number" class="input-field" id="panelWidth" value="500" min="1">
+                                <span class="input-suffix">×</span>
+                                <input type="number" class="input-field" id="panelHeight" value="500" min="1">
+                                <span class="input-suffix">mm</span>
+                            </div>
+                        </div>
+
+                        <!-- Pixel Pitch -->
+                        <div class="form-group">
+                            <label class="form-label">像素間距 (Pixel Pitch)</label>
+                            <div class="input-group">
+                                <input type="number" class="input-field" id="pixelPitch" value="8" min="0.1" step="0.1">
+                                <span class="input-suffix">mm</span>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings -->
+                        <div class="disclosure">
+                            <button class="disclosure-button" onclick="toggleAdvanced()">
+                                進階設定
+                                <span class="disclosure-icon" id="advancedIcon">▶</span>
+                            </button>
+                            <div class="disclosure-content" id="advancedContent">
+                                <div class="form-group">
+                                    <label class="form-label">單片模組功耗</label>
+                                    <div class="input-group">
+                                        <input type="number" class="input-field" id="panelPower" value="50" min="1">
+                                        <span class="input-suffix">W</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">控制卡負載能力</label>
+                                    <div class="input-group">
+                                        <input type="number" class="input-field" id="controlCardCapacity" value="655360" min="1">
+                                        <span class="input-suffix">像素</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="button-group">
+                            <button class="button button-primary" onclick="calculate()">計算</button>
+                            <button class="button button-secondary" onclick="reset()">重置</button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Visual Preview -->
-                <div class="card" style="margin-top: 20px;">
-                    <div class="card-header">
-                        <div class="card-icon">🎨</div>
-                        <h3 class="card-title">模組排列預覽</h3>
-                    </div>
-                    <div class="grid-preview">
-                        <div id="ledGridPreview"></div>
-                    </div>
-                    <p style="text-align: center; color: #64748b; font-size: 0.875em; margin-top: 10px;">
-                        模組排列示意圖 <span id="gridInfo"></span>
-                    </p>
-                </div>
+                <!-- Results Panel -->
+                <div id="resultsPanel" style="display: none;">
+                    <!-- Module Config Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">配置結果</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-value" id="actualWidth">-</div>
+                                    <div class="stat-label">實際寬度</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="actualHeight">-</div>
+                                    <div class="stat-label">實際高度</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="totalArea">-</div>
+                                    <div class="stat-label">總面積</div>
+                                </div>
+                            </div>
 
-                <!-- Cost Summary -->
-                <div class="cost-card">
-                    <div class="cost-header">
-                        <div class="cost-title">💰 成本估算</div>
-                        <div class="cost-total" id="totalCost">NT$ 0</div>
+                            <!-- Visual Preview -->
+                            <div class="grid-preview" id="gridPreview">
+                                <div id="ledGrid"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="cost-grid">
-                        <div class="cost-item">
-                            <div class="cost-item-label" id="cost-label-1">LED模組</div>
-                            <div class="cost-item-value" id="cost-1">-</div>
+
+                    <!-- Cable Details -->
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <div class="card-title">配件清單</div>
                         </div>
-                        <div class="cost-item">
-                            <div class="cost-item-label" id="cost-label-2">控制系統</div>
-                            <div class="cost-item-value" id="cost-2">-</div>
+                        <div class="card-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>品項</th>
+                                        <th>數量</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>LED 模組</td>
+                                        <td class="highlight" id="moduleCount">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>發送卡</td>
+                                        <td class="highlight" id="senderCards">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>接收卡</td>
+                                        <td class="highlight" id="receiverCards">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>網路線 (總計)</td>
+                                        <td class="highlight" id="totalNetworkCables">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>電源線 (總計)</td>
+                                        <td class="highlight" id="totalPowerCables">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>航空箱</td>
+                                        <td class="highlight" id="flightCases">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="cost-item">
-                            <div class="cost-item-label" id="cost-label-3">線材配件</div>
-                            <div class="cost-item-value" id="cost-3">-</div>
+                    </div>
+
+                    <!-- Cost Summary -->
+                    <div class="cost-card">
+                        <div class="cost-header">
+                            <div class="cost-label">總費用</div>
+                            <div class="cost-value" id="totalCost">NT$ 0</div>
                         </div>
-                        <div class="cost-item">
-                            <div class="cost-item-label" id="cost-label-4">結構/運輸</div>
-                            <div class="cost-item-value" id="cost-4">-</div>
-                        </div>
-                        <div class="cost-item">
-                            <div class="cost-item-label" id="cost-label-5">安裝/保險</div>
-                            <div class="cost-item-value" id="cost-5">-</div>
+                        <div class="cost-breakdown">
+                            <div class="cost-item">
+                                <div class="cost-item-label">模組費用</div>
+                                <div class="cost-item-value" id="moduleCost">-</div>
+                            </div>
+                            <div class="cost-item">
+                                <div class="cost-item-label">控制系統</div>
+                                <div class="cost-item-value" id="controlCost">-</div>
+                            </div>
+                            <div class="cost-item">
+                                <div class="cost-item-label">線材配件</div>
+                                <div class="cost-item-value" id="cableCost">-</div>
+                            </div>
+                            <div class="cost-item">
+                                <div class="cost-item-label">其他費用</div>
+                                <div class="cost-item-value" id="otherCost">-</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>© 2024 LED電視牆專業計算系統 | 精確計算每一條線材</p>
-        </div>
+        </main>
     </div>
 
     <script>
-        // Global variables
+        // Global state
         let currentMode = 'purchase';
 
-        // Set business mode
-        function setMode(mode) {
+        // Set mode
+        function setMode(mode, element) {
             currentMode = mode;
-            const buttons = document.querySelectorAll('.mode-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
+            document.querySelectorAll('.segment-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            element.classList.add('active');
+
             const rentalOptions = document.getElementById('rentalOptions');
-            if (mode === 'rental') {
-                rentalOptions.style.display = 'block';
-            } else {
-                rentalOptions.style.display = 'none';
-            }
+            rentalOptions.style.display = mode === 'rental' ? 'block' : 'none';
         }
 
         // Toggle advanced settings
         function toggleAdvanced() {
             const content = document.getElementById('advancedContent');
-            const arrow = document.getElementById('advancedArrow');
+            const icon = document.getElementById('advancedIcon');
             
-            if (content.classList.contains('show')) {
-                content.classList.remove('show');
-                arrow.textContent = '▼';
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('open');
             } else {
-                content.classList.add('show');
-                arrow.textContent = '▲';
+                content.classList.add('open');
+                icon.classList.add('open');
             }
         }
 
-        // Apply quick spec
-        function applyQuickSpec() {
-            const spec = document.getElementById('quickSpec').value;
-            const specs = {
-                'p2.6': { pitch: 2.6, width: 500, height: 500 },
-                'p3.91': { pitch: 3.91, width: 500, height: 500 },
-                'p4.81': { pitch: 4.81, width: 500, height: 500 },
-                'p6.25': { pitch: 6.25, width: 500, height: 500 }
-            };
-            
-            if (spec && specs[spec]) {
-                document.getElementById('pixelPitch').value = specs[spec].pitch;
-                document.getElementById('panelWidth').value = specs[spec].width;
-                document.getElementById('panelHeight').value = specs[spec].height;
-            }
-        }
-
-        // Listen for aspect ratio changes
+        // Aspect ratio change handler
         document.getElementById('aspectRatio').addEventListener('change', function() {
             const customRatio = document.getElementById('customRatio');
-            if (this.value === 'custom') {
-                customRatio.style.display = 'block';
-            } else {
-                customRatio.style.display = 'none';
-            }
+            customRatio.style.display = this.value === 'custom' ? 'block' : 'none';
         });
 
-        // Main calculation function
+        // Calculate
         function calculate() {
-            // Get input values
+            // Get inputs
             const screenSize = parseFloat(document.getElementById('screenSize').value);
             const aspectRatioSelect = document.getElementById('aspectRatio').value;
             const panelWidth = parseFloat(document.getElementById('panelWidth').value);
@@ -1176,8 +912,6 @@
             const pixelPitch = parseFloat(document.getElementById('pixelPitch').value);
             const panelPower = parseFloat(document.getElementById('panelPower').value);
             const controlCardCapacity = parseFloat(document.getElementById('controlCardCapacity').value);
-            const receiverPorts = parseFloat(document.getElementById('receiverPorts').value);
-            const powerGroupSize = parseFloat(document.getElementById('powerGroupSize').value);
 
             // Calculate aspect ratio
             let ratioWidth, ratioHeight;
@@ -1200,185 +934,132 @@
             const height = Math.sqrt(diagonal * diagonal / (1 + ratio * ratio));
             const width = height * ratio;
 
-            // Calculate module configuration
+            // Calculate modules
             const panelsWide = Math.ceil(width / panelWidth);
             const panelsHigh = Math.ceil(height / panelHeight);
             const totalPanels = panelsWide * panelsHigh;
-            const sparePanels = Math.ceil(totalPanels * 0.05);
 
-            // Calculate actual dimensions
+            // Actual dimensions
             const actualWidth = panelsWide * panelWidth;
             const actualHeight = panelsHigh * panelHeight;
             const totalArea = (actualWidth * actualHeight) / 1000000;
 
-            // Calculate resolution
+            // Resolution
             const horizontalRes = Math.floor(actualWidth / pixelPitch);
             const verticalRes = Math.floor(actualHeight / pixelPitch);
             const totalPixels = horizontalRes * verticalRes;
-            const pixelDensity = Math.round(totalPixels / totalArea);
 
-            // Calculate control system
+            // Control system
             const senderCards = Math.ceil(totalPixels / controlCardCapacity);
-            const receiverCards = Math.ceil(totalPanels / receiverPorts);
+            const receiverCards = Math.ceil(totalPanels / 2);
 
-            // Calculate power requirements
-            const totalPower = totalPanels * panelPower;
-            const suggestedPower = Math.ceil(totalPower * 1.3 / 1000) * 1000;
-            const powerGroups = Math.ceil(totalPanels / powerGroupSize);
-
-            // Calculate cables (DETAILED)
-            // Network cables
-            const mainNetworkCables = senderCards; // Main trunk cables from sender to first module
-            const horizontalNetworkCables = (panelsWide - 1) * panelsHigh; // Horizontal jumpers between modules
-            const verticalNetworkCables = panelsWide * (panelsHigh - 1); // Vertical jumpers between modules
-            const spareNetworkCables = Math.ceil((mainNetworkCables + horizontalNetworkCables + verticalNetworkCables) * 0.1); // 10% spare
-
-            // Power cables
-            const powerDistributors = Math.ceil(powerGroups / 4); // One distributor per 4 power groups
-            const mainPowerCables = powerDistributors; // Main power from distribution box
-            const branchPowerCables = powerGroups; // Branch cables to each group
-            const modulePowerCables = totalPanels - powerGroups; // Jumpers between modules in same group
+            // Cables
+            const networkCables = totalPanels * 2;
+            const powerCables = Math.ceil(totalPanels / 4) * 3;
 
             // Transport
             const flightCases = Math.ceil(totalPanels / 6);
-            const cableCases = Math.ceil((mainNetworkCables + horizontalNetworkCables + verticalNetworkCables + mainPowerCables + branchPowerCables + modulePowerCables) / 50);
 
-            // Update Quick Stats
+            // Power
+            const totalPower = totalPanels * panelPower / 1000;
+
+            // Update quick stats
             document.getElementById('quickWidth').textContent = (actualWidth/1000).toFixed(1);
             document.getElementById('quickHeight').textContent = (actualHeight/1000).toFixed(1);
             document.getElementById('quickModules').textContent = totalPanels;
-            document.getElementById('quickPixels').textContent = (totalPixels/1000000).toFixed(1);
-            document.getElementById('quickPower').textContent = (totalPower/1000).toFixed(1);
+            document.getElementById('quickResolution').textContent = `${(totalPixels/1000000).toFixed(1)}M`;
+            document.getElementById('quickPower').textContent = totalPower.toFixed(1);
 
-            // Update detailed results
-            document.getElementById('actualSize').textContent = `${(actualWidth/1000).toFixed(2)} × ${(actualHeight/1000).toFixed(2)}`;
-            document.getElementById('totalArea').textContent = `${totalArea.toFixed(2)} m²`;
-            document.getElementById('diagonal').textContent = `${(Math.sqrt(actualWidth*actualWidth + actualHeight*actualHeight)/inchToMm).toFixed(1)} 吋`;
+            // Update results
+            document.getElementById('actualWidth').textContent = `${(actualWidth/1000).toFixed(2)}m`;
+            document.getElementById('actualHeight').textContent = `${(actualHeight/1000).toFixed(2)}m`;
+            document.getElementById('totalArea').textContent = `${totalArea.toFixed(1)}m²`;
 
-            document.getElementById('panelsWide').textContent = panelsWide;
-            document.getElementById('panelsHigh').textContent = panelsHigh;
-            document.getElementById('totalPanels').textContent = totalPanels;
-            document.getElementById('sparePanels').textContent = sparePanels;
-
-            document.getElementById('resolution').textContent = `${horizontalRes} × ${verticalRes}`;
-            document.getElementById('totalPixels').textContent = `${(totalPixels/1000000).toFixed(1)} M`;
-            document.getElementById('pixelDensity').textContent = `${pixelDensity.toLocaleString()} px/m²`;
-
-            // Update cable details
             document.getElementById('moduleCount').textContent = `${totalPanels} 片`;
-            document.getElementById('spareModuleCount').textContent = `${sparePanels} 片`;
             document.getElementById('senderCards').textContent = `${senderCards} 張`;
             document.getElementById('receiverCards').textContent = `${receiverCards} 張`;
-            
-            document.getElementById('mainNetworkCables').textContent = `${mainNetworkCables} 條`;
-            document.getElementById('horizontalNetworkCables').textContent = `${horizontalNetworkCables} 條`;
-            document.getElementById('verticalNetworkCables').textContent = `${verticalNetworkCables} 條`;
-            document.getElementById('spareNetworkCables').textContent = `${spareNetworkCables} 條`;
-            
-            document.getElementById('mainPowerCables').textContent = `${mainPowerCables} 條`;
-            document.getElementById('branchPowerCables').textContent = `${branchPowerCables} 條`;
-            document.getElementById('modulePowerCables').textContent = `${modulePowerCables} 條`;
-            document.getElementById('powerDistributors').textContent = `${powerDistributors} 個`;
-            
+            document.getElementById('totalNetworkCables').textContent = `${networkCables} 條`;
+            document.getElementById('totalPowerCables').textContent = `${powerCables} 條`;
             document.getElementById('flightCases').textContent = `${flightCases} 個`;
-            document.getElementById('cableCases').textContent = `${cableCases} 個`;
 
             // Calculate costs
-            let totalCost = 0;
+            let moduleCost, controlCost, cableCost, otherCost, totalCost;
+
             if (currentMode === 'rental') {
                 const rentalDays = parseFloat(document.getElementById('rentalDays').value) || 3;
-                const panelCost = totalPanels * 2000 * rentalDays;
-                const transportCost = 20000;
-                const cableCost = (mainNetworkCables + horizontalNetworkCables + verticalNetworkCables) * 50 + 
-                                 (mainPowerCables + branchPowerCables + modulePowerCables) * 100;
-                const setupCost = totalArea * 500 * 2; // Setup and teardown
-                const insuranceCost = panelCost * 0.03;
-                
-                totalCost = panelCost + transportCost + cableCost + setupCost + insuranceCost;
-                
-                document.getElementById('cost-label-1').textContent = `租金(${rentalDays}天)`;
-                document.getElementById('cost-1').textContent = `NT$ ${panelCost.toLocaleString()}`;
-                document.getElementById('cost-label-2').textContent = '控制系統';
-                document.getElementById('cost-2').textContent = `NT$ ${(senderCards * 1000 + receiverCards * 200).toLocaleString()}`;
-                document.getElementById('cost-label-3').textContent = '線材配件';
-                document.getElementById('cost-3').textContent = `NT$ ${cableCost.toLocaleString()}`;
-                document.getElementById('cost-label-4').textContent = '運輸費用';
-                document.getElementById('cost-4').textContent = `NT$ ${transportCost.toLocaleString()}`;
-                document.getElementById('cost-label-5').textContent = '安裝/保險';
-                document.getElementById('cost-5').textContent = `NT$ ${(setupCost + insuranceCost).toLocaleString()}`;
+                moduleCost = totalPanels * 2000 * rentalDays;
+                controlCost = (senderCards * 1000 + receiverCards * 200) * rentalDays;
+                cableCost = (networkCables * 50 + powerCables * 100);
+                otherCost = totalArea * 1000;
             } else {
-                const panelCost = totalPanels * 2000;
-                const controlCost = senderCards * 5000 + receiverCards * 800;
-                const cableCost = (mainNetworkCables + horizontalNetworkCables + verticalNetworkCables) * 200 + 
-                                 (mainPowerCables + branchPowerCables + modulePowerCables) * 500;
-                const structureCost = totalArea * 3000;
-                const laborCost = totalArea * 1500;
-                
-                totalCost = panelCost + controlCost + cableCost + structureCost + laborCost;
-                
-                document.getElementById('cost-label-1').textContent = 'LED模組';
-                document.getElementById('cost-1').textContent = `NT$ ${panelCost.toLocaleString()}`;
-                document.getElementById('cost-label-2').textContent = '控制系統';
-                document.getElementById('cost-2').textContent = `NT$ ${controlCost.toLocaleString()}`;
-                document.getElementById('cost-label-3').textContent = '線材配件';
-                document.getElementById('cost-3').textContent = `NT$ ${cableCost.toLocaleString()}`;
-                document.getElementById('cost-label-4').textContent = '安裝結構';
-                document.getElementById('cost-4').textContent = `NT$ ${structureCost.toLocaleString()}`;
-                document.getElementById('cost-label-5').textContent = '人工安裝';
-                document.getElementById('cost-5').textContent = `NT$ ${laborCost.toLocaleString()}`;
+                moduleCost = totalPanels * 8000;
+                controlCost = senderCards * 5000 + receiverCards * 800;
+                cableCost = networkCables * 200 + powerCables * 500;
+                otherCost = totalArea * 5000;
             }
 
-            document.getElementById('totalCost').textContent = `NT$ ${totalCost.toLocaleString()}`;
-            document.getElementById('quickTotal').textContent = (totalCost/10000).toFixed(0);
+            totalCost = moduleCost + controlCost + cableCost + otherCost;
 
-            // Generate visual preview
-            generateVisualPreview(panelsWide, panelsHigh);
+            document.getElementById('moduleCost').textContent = `$${(moduleCost/1000).toFixed(0)}K`;
+            document.getElementById('controlCost').textContent = `$${(controlCost/1000).toFixed(0)}K`;
+            document.getElementById('cableCost').textContent = `$${(cableCost/1000).toFixed(0)}K`;
+            document.getElementById('otherCost').textContent = `$${(otherCost/1000).toFixed(0)}K`;
+            document.getElementById('totalCost').textContent = `NT$ ${totalCost.toLocaleString()}`;
+            document.getElementById('quickCost').textContent = (totalCost/10000).toFixed(0);
+
+            // Generate grid preview
+            generateGridPreview(panelsWide, panelsHigh);
 
             // Show results
-            document.getElementById('quickStats').style.display = 'grid';
+            document.getElementById('statsBar').style.display = 'grid';
             document.getElementById('resultsPanel').style.display = 'block';
         }
 
-        // Generate visual preview
-        function generateVisualPreview(wide, high) {
-            const preview = document.getElementById('ledGridPreview');
-            const maxDisplay = 20;
+        // Generate grid preview
+        function generateGridPreview(wide, high) {
+            const maxDisplay = 15;
             const displayWide = Math.min(wide, maxDisplay);
             const displayHigh = Math.min(high, maxDisplay);
-            
+
             let gridHtml = `<div class="led-grid" style="grid-template-columns: repeat(${displayWide}, 1fr);">`;
             
             for (let i = 0; i < displayWide * displayHigh; i++) {
-                gridHtml += '<div class="led-module"></div>';
+                gridHtml += '<div class="led-cell"></div>';
             }
             
             gridHtml += '</div>';
-            preview.innerHTML = gridHtml;
-
-            const info = document.getElementById('gridInfo');
-            if (wide > maxDisplay || high > maxDisplay) {
-                info.textContent = `(顯示 ${displayWide}×${displayHigh}, 實際 ${wide}×${high})`;
-            } else {
-                info.textContent = `(${wide}×${high} 模組)`;
-            }
+            document.getElementById('ledGrid').innerHTML = gridHtml;
         }
 
-        // Reset function
+        // Reset
         function reset() {
             document.getElementById('screenSize').value = 300;
             document.getElementById('aspectRatio').value = '16:9';
             document.getElementById('panelWidth').value = 500;
             document.getElementById('panelHeight').value = 500;
             document.getElementById('pixelPitch').value = 8;
-            document.getElementById('quickStats').style.display = 'none';
+            document.getElementById('statsBar').style.display = 'none';
             document.getElementById('resultsPanel').style.display = 'none';
-            document.getElementById('customRatio').style.display = 'none';
         }
 
-        // Auto calculate on load
+        // Initialize
         window.onload = function() {
-            // Add smooth scroll behavior
-            document.documentElement.style.scrollBehavior = 'smooth';
+            // Prevent zoom on double tap
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            // Prevent pinch zoom
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
+
+            // Auto calculate
             calculate();
         };
     </script>
